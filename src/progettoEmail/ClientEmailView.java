@@ -37,7 +37,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	private JPanel interactiveRightPanel;
 	
 	//email list panel
-	private JList<Email> list;	
+	private JList<Email> list =  new JList<Email>();
 	
 	//New email form panel	
 	private NewEmailPanel newEmailPanel = new NewEmailPanel();
@@ -50,7 +50,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		setBackground(Color.GRAY);
-		
+
 		/* TOPBAR 
 		 * (A seguire le costanti necessarie per il corretto posizionamento del pannello superiore all'interno del pannello this) */
 		c.gridx = 2;
@@ -123,33 +123,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.gridy=1;
 		c.weighty =1;
 		c.weightx = 1;
-		
-		/* Popolamento lista con 15 email placeholder */
-		DefaultListModel model;
-		list = new JList<Email>();
-		model = new DefaultListModel();
-		for (int i = 0; i < 15; i++) {
-			model.addElement(new Email("Mittente "+i, "Destinatario "+i, "Oggetto "+i, "Testo email"+i, 1, null,false));
-		}
-		
-		list.setModel(model);
-		list.setCellRenderer(new MyListCellRenderer());
-		list.addMouseListener(clientEmailCtrl);
-
-		//Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
-		list.addMouseMotionListener(new MouseMotionAdapter() {				
-			@Override
-			public void mouseMoved(MouseEvent e) {				
-				Point p = null;
-				JList theList = (JList) e.getSource();
-                ListModel model = theList.getModel();
-                int index = theList.locationToIndex(e.getPoint());
-                if (index > -1) {
-                    theList.setToolTipText(null);
-                    theList.setSelectedIndex(index);
-                }				
-			}
-		});
 
 		defaultLeftPanel.add(new JScrollPane(list),c);		
 		return defaultLeftPanel;		
@@ -189,6 +162,28 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			this.revalidate();
 			this.add(readEmailPanel(c),c);
 			this.repaint();
+		}
+		else if(arg1 == "updateMailList"){
+
+            list.setModel(((ClientEmailModel)arg0).getList());
+            list.setCellRenderer(new MyListCellRenderer());
+            list.addMouseListener(clientEmailCtrl);
+
+            //Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
+            list.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    Point p = null;
+                    JList theList = (JList) e.getSource();
+                    ListModel model = theList.getModel();
+                    int index = theList.locationToIndex(e.getPoint());
+                    if (index > -1) {
+                        theList.setToolTipText(null);
+                        theList.setSelectedIndex(index);
+                    }
+                }
+            });
+
 		}
 	}
 

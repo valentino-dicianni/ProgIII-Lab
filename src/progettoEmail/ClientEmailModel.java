@@ -1,12 +1,14 @@
 package progettoEmail;
 
 
+import javax.swing.*;
 import java.util.Observable;
 
 
 public class ClientEmailModel extends Observable {
 
 	private String nomeAcClient, emailClient;
+    private DefaultListModel list = new DefaultListModel();;
 
 	public ClientEmailModel(String nomeAcClient, String emailClient) {
 		this.nomeAcClient = nomeAcClient;
@@ -37,4 +39,16 @@ public class ClientEmailModel extends Observable {
 		setChanged();
 		notifyObservers("newEmailForm");
 	}
+
+    public DefaultListModel getList() {
+        return list;
+    }
+
+    public void showMail(){
+        for (int i = 0; i < 15; i++) {
+            list.addElement(new Email("Mittente "+i, "Destinatario "+i, "Oggetto "+i, "Testo email"+i, 1, null,false));
+        }
+        setChanged();
+        notifyObservers("updateMailList");
+    }
 }

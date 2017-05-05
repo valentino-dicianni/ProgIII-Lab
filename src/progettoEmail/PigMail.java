@@ -17,6 +17,7 @@ public class PigMail extends JFrame {
 
 		//Instaurazione relazione observer-observerable tra vista (Observer) e modello (Observable)
 		clientMailMod.addObserver(clientEmailView);
+        clientEmailCtrl.setMailList();
 		add(clientEmailView);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Email di " + nickname);

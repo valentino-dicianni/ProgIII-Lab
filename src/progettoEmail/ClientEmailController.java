@@ -51,4 +51,8 @@ public class ClientEmailController implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {}
+
+	public void setMailList(){
+	    clientEmailMod.showMail();
+    }
 }
