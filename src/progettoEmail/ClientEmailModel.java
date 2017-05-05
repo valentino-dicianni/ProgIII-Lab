@@ -51,4 +51,7 @@ public class ClientEmailModel extends Observable {
         setChanged();
         notifyObservers("updateMailList");
     }
+
+/* TODO: aggiungere theread che in maniera pediodica va a fare la pool dal server centrale e se ci sono nuove mail le aggiunge alla lista e notifica gli osservatori */
+
 }
