@@ -42,6 +42,9 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         mainPanel.setBorder(BorderFactory.createTitledBorder("LOG"));
 
         logTxtArea.setEditable(false);
+        logTxtArea.setBackground(Color.BLACK);
+        logTxtArea.setForeground(Color.WHITE);
+        logTxtArea.setText("Prova prova ...");
        // mainPanel.add(logLabel,BorderLayout.NORTH);
         mainPanel.add(logTxtArea,BorderLayout.CENTER);
         mainPanel.add(cleanButton,BorderLayout.SOUTH);
