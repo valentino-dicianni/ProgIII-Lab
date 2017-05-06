@@ -32,6 +32,7 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
 
         c.fill = GridBagConstraints.BOTH;
         log = new LogPanel();
+        log.cleanButton.addActionListener( serverEmailCtrl);
         add(log, c);
     }
 
@@ -46,8 +47,8 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
 
 /*Class Log Panel*/
 class LogPanel extends JPanel {
-    private JTextArea logTxtArea;
-    private JButton cleanButton;
+    public JTextArea logTxtArea;
+    public JButton cleanButton;
 
     public LogPanel(){
         this.setLayout(new BorderLayout());
