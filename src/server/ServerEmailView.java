@@ -32,7 +32,7 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
 
         c.fill = GridBagConstraints.BOTH;
         log = new LogPanel();
-        log.cleanButton.addActionListener( serverEmailCtrl);
+        log.cleanButton.addActionListener(serverEmailCtrl);
         add(log, c);
     }
 
@@ -40,7 +40,8 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
 
     @Override
     public void update(Observable o, Object arg) {
-
+        ServerEmailModel model = (ServerEmailModel)o;
+        log.logTxtArea.setText(model.getLogs());
     }
 }
 

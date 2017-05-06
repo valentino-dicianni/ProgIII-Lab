@@ -1,6 +1,5 @@
 package server;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,7 +16,6 @@ public class ServerEmailController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object panel =  e.getSource();
-        System.out.print(panel);
+        serverEmailMod.clearLog();
     }
 }
