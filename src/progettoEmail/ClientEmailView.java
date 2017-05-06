@@ -198,14 +198,19 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	}
 
 	@Override
-	public JPanel newEmailPanel(GridBagConstraints c) {		
-		interactiveRightPanel.removeAll();
+	public JPanel newEmailPanel(GridBagConstraints c) {
+
+	    		/*TODO: Modificare la classe newEmailPanel mettendoci queste cose...questo metodo deve solo staccare da interactiveRightPanel il pannello di prima e attaccarci un nuovo newEmailPanel */
+
+        interactiveRightPanel.removeAll();
 		JPanel formPanel = new JPanel(new BorderLayout());
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(new GridLayout(6, 2));
+
 		headerPanel.add(new JLabel("Da:"));
 		headerPanel.add(newEmailPanel.getFromField());
 
+		        /*TODO: N.B da modificare i destinatari...aggiungere un campo "Cc" dove si ha la possibilità di aggiungere altri destinatari*/
 		headerPanel.add(new JLabel("A:"));
 		headerPanel.add(newEmailPanel.getToField());
 
@@ -233,9 +238,11 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	}
 
 	@Override
-	public JPanel readEmailPanel(GridBagConstraints c) {	
-		
-		interactiveRightPanel.removeAll();		
+	public JPanel readEmailPanel(GridBagConstraints c) {
+
+	    		/*TODO: idem come sopra...non mi sono assorto quando ho fatto le classi di questi errori. Da correggere assolutamente! Otteniamo un codice molto più leggibile e snello  */
+
+        interactiveRightPanel.removeAll();
 		JPanel readPanel = new JPanel(new BorderLayout());		
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(new GridLayout(6, 2));

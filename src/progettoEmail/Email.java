@@ -7,7 +7,9 @@ public class Email {
   	private int priorEmail;
   	private Date dataSpedEmail;
   	boolean isRead;
-  	
+
+  	/*TODO: modificare il campo destinatari! deve essere una lista (ArrayList preferibilmente) di stringhe*/
+
 	public Email(String mitt, String dest, String arg, String testo, int prior, Date dataSped, boolean isRead){
 		this.mittEmail = mitt;
 		this.destEmail = dest;
