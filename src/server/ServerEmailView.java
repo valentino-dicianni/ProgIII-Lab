@@ -16,7 +16,7 @@ interface ServerEmailInterfaceView {
 
 public class ServerEmailView extends JPanel implements ServerEmailInterfaceView, Observer {
     private ServerEmailController serverEmailCtrl;
-
+    private LogPanel log;
 
     public ServerEmailView(ServerEmailController serverEmailCtrl){
         this.serverEmailCtrl = serverEmailCtrl;
@@ -31,7 +31,8 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         c.insets = new Insets(10,10,10,10);
 
         c.fill = GridBagConstraints.BOTH;
-        add(new LogPanel(), c);
+        log = new LogPanel();
+        add(log, c);
     }
 
 
