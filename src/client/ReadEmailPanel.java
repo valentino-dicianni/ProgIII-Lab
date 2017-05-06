@@ -1,6 +1,7 @@
-package progettoEmail;
+package client;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by valentino on 01/05/17.
@@ -13,6 +14,7 @@ public class ReadEmailPanel extends JPanel {
 
 
     public JLabel getFromLabel() {
+       /* fromLabel.setPreferredSize(new Dimension(1,1));*/
         return fromLabel;
     }
 
@@ -21,6 +23,7 @@ public class ReadEmailPanel extends JPanel {
     }
 
     public JLabel getToLabel() {
+        /*toLabel.setPreferredSize(new Dimension(1,1));*/
         return toLabel;
     }
 
@@ -29,6 +32,7 @@ public class ReadEmailPanel extends JPanel {
     }
 
     public JLabel getSubjectLabel() {
+     /*   subjectLabel.setPreferredSize(new Dimension(1,1));*/
         return subjectLabel;
     }
 

@@ -1,4 +1,4 @@
-package progettoEmail;
+package client;
 
 import java.util.Date;
 

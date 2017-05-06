@@ -1,34 +1,21 @@
-package progettoEmail;
+package client;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.Observable;
 import java.util.Observer;
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 
 //Interfaccia della vista
 interface ClientEmailInterfaceView {
 	void updateEmailListGUI(Email c);
-	JPanel newEmailPanel(GridBagConstraints c);
-	JPanel readEmailPanel(GridBagConstraints c);
+	JPanel newEmailPanel();
+	JPanel readEmailPanel();
 }
 
 
@@ -49,38 +36,49 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		this.clientEmailCtrl = clientEmailCtrl;
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		setBackground(Color.GRAY);
+        JLabel headerLabel = new JLabel("Posta in arrivo"); //TODO da sistemare poi bene nella topbar, è solo una prova per vedere come potrebbe venire
+
+        c.gridwidth = 1;
+        c.gridheight = 1;
+
+        c.gridx = 0; //TODO idem sopra
+        c.gridy = 0; //TODO idem sopra
+        headerLabel.setHorizontalAlignment(JLabel.CENTER); //TODO idem sopra
+        c.fill = GridBagConstraints.HORIZONTAL; //TODO idem sopra
+        add(headerLabel, c);//TODO idem sopra
 
 		/* TOPBAR 
 		 * (A seguire le costanti necessarie per il corretto posizionamento del pannello superiore all'interno del pannello this) */
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 0;
-		c.weightx = 0.1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(defaultTopPanel(), c);
 		
 		/* PARTE SINISTRA 
 		 * (A seguire le costanti necessarie per il corretto posizionamento del pannello di sinistra all'interno del pannello this)*/
 		c.gridx = 0;
-		c.gridy = 1;
-		c.weightx = 0.3;
+		c.gridy = 1; //1 perchè è sotto la topbar
+		c.weightx = 0.5;
+		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		add(defaultLeftPanel(), c);
 		
 		/* PARTE DESTRA 
 		 * (A seguire le costanti necessarie per il corretto posizionamento del pannello di destra all'interno del pannello this)*/
-		c.gridx = 2;
-		c.gridy = 1;
+		c.gridx = 1;
+		c.gridy = 1; //1 perchè è sotto la topbar
 		c.weightx = 1;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		add(defaultRightPanel(), c);
+
+		add(defaultRightPanel() , c);
 	}
 
 	/* METODO PER VISUALIZZAZIONE PANNELLO DEFAULT TOPBAR, CON PULSANTI [PROVVISORIO]*/
 	private JPanel defaultTopPanel() {
 		JPanel defaultTopPanel = new JPanel(new GridBagLayout());
 		JButton newMailBtn = new JButton();
+
 		Image img = null;
 		try {
 			img = ImageIO.read(getClass().getResource("/newMailBtn.png"));
@@ -96,19 +94,17 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			System.out.println(ex);
 		}
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx =2;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 1; 	
+		c.gridx = 0;
+		c.weightx = 2;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		//c.anchor = GridBagConstraints.CENTER;
 		newMailBtn.setName("newMailBtn");
 		forwardBtn.setName("frwdBtn");
 		newMailBtn.setToolTipText("<html>Nuova Email</html>");
 		forwardBtn.setToolTipText("Inoltra");
 		defaultTopPanel.add(newMailBtn,c);
-		c.gridx =1;
-		defaultTopPanel.add(forwardBtn);
+		c.gridx = 1;
+        c.weightx = 0.5;
+		defaultTopPanel.add(forwardBtn,c);
 		newMailBtn.addActionListener(clientEmailCtrl);
 		return defaultTopPanel;		
 	}
@@ -116,22 +112,29 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	/* METODO PER VISUALIZZAZIONE PANNELLO DEFAULT SINISTRO, CON LISTA EMAIL [PROVVISORIO]*/
 	private JPanel defaultLeftPanel() {		
 		JPanel defaultLeftPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints(); 
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.NORTH;		
-		c.gridx=1;
-		c.gridy=1;
-		c.weighty =1;
-		c.weightx = 1;
+		GridBagConstraints c = new GridBagConstraints();
 
-		defaultLeftPanel.add(new JScrollPane(list),c);		
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weighty = 1;
+        c.weightx = 1;
+        c.fill=GridBagConstraints.BOTH;
+        JScrollPane scrollPane = new JScrollPane(list);
+
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		defaultLeftPanel.add(scrollPane,c);
 		return defaultLeftPanel;		
 	}
 	
 	/* METODO PER VISUALIZZAZIONE PANNELLO DEFAULT DESTRO, AVENTE FUNZIONI MULTIPLE (DEFAULT: VUOTO//LABEL SEMPLICE) [PROVVISORIO]*/
 	private JPanel defaultRightPanel() {
 		interactiveRightPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints(); 
+		GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.BOTH;
 		JLabel label = new JLabel("Benvenuto su PigMail");		
 		interactiveRightPanel.add(label);
 		interactiveRightPanel.revalidate();
@@ -142,17 +145,17 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	public void update(Observable arg0, Object arg1) {
 	
 		GridBagConstraints c = new GridBagConstraints(); 
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 1;		
 		c.fill = GridBagConstraints.BOTH;
-		
+		//c.insets = new Insets(10,10,10,10);
 		/* Caso in cui si crea una nuova email: viene mostrato panel di creazione email */
 		if(arg1=="newEmailForm"){	
 			this.remove(interactiveRightPanel);
 			this.revalidate();
-			this.add(newEmailPanel(c),c);
+			this.add(newEmailPanel(),c);
 			this.repaint();
 		}
 		/* Caso in cui un email viene selezionata dalla lista: viene mostrato panel di visualizzazione email */
@@ -160,14 +163,16 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			updateEmailListGUI((Email)arg1);			
 			this.remove(interactiveRightPanel);
 			this.revalidate();
-			this.add(readEmailPanel(c),c);
+			this.add(readEmailPanel(),c);
 			this.repaint();
 		}
 		else if(arg1 == "updateMailList"){
-
             list.setModel(((ClientEmailModel)arg0).getList());
             list.setCellRenderer(new MyListCellRenderer());
             list.addMouseListener(clientEmailCtrl);
+            list.setFixedCellHeight(75);
+            list.setFixedCellWidth(1);
+
 
             //Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
             list.addMouseMotionListener(new MouseMotionAdapter() {
@@ -183,14 +188,12 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
                     }
                 }
             });
-
 		}
 	}
 
 	@Override
 	public void updateEmailListGUI(Email selectedEmail) {		
 		list.setCellRenderer(new MyListCellRenderer());
-
 		readEmailPanel.getFromLabel().setText(selectedEmail.getMittEmail());
 		readEmailPanel.getToLabel().setText(selectedEmail.getDestEmail());
 		readEmailPanel.getSubjectLabel().setText(selectedEmail.getArgEmail());
@@ -198,30 +201,33 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	}
 
 	@Override
-	public JPanel newEmailPanel(GridBagConstraints c) {
+	public JPanel newEmailPanel() {
 
-	    		/*TODO: Modificare la classe newEmailPanel mettendoci queste cose...questo metodo deve solo staccare da interactiveRightPanel il pannello di prima e attaccarci un nuovo newEmailPanel */
+	    /*TODO: Modificare la classe newEmailPanel mettendoci queste cose...questo metodo deve solo staccare da interactiveRightPanel il pannello di prima e attaccarci un nuovo newEmailPanel */
 
         interactiveRightPanel.removeAll();
+        interactiveRightPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
 		JPanel formPanel = new JPanel(new BorderLayout());
 		JPanel headerPanel = new JPanel();
-		headerPanel.setLayout(new GridLayout(6, 2));
+		headerPanel.setLayout(new GridLayout(4, 1));
 
-		headerPanel.add(new JLabel("Da:"));
-		headerPanel.add(newEmailPanel.getFromField());
+		/*headerPanel.add(new JLabel("Da:"));
+		headerPanel.add(newEmailPanel.getFromField());*/
 
-		        /*TODO: N.B da modificare i destinatari...aggiungere un campo "Cc" dove si ha la possibilità di aggiungere altri destinatari*/
+		/*TODO: N.B da modificare i destinatari...aggiungere un campo "Cc" dove si ha la possibilità di aggiungere altri destinatari*/
 		headerPanel.add(new JLabel("A:"));
 		headerPanel.add(newEmailPanel.getToField());
 
 		headerPanel.add(new JLabel("Oggetto:"));
 		headerPanel.add(newEmailPanel.getSubjectField());
-
+		headerPanel.setBorder(BorderFactory.createTitledBorder("Invia Nuova Mail"));
 		JPanel bodyPanel = new JPanel();
 		bodyPanel.setLayout(new BorderLayout());
-		bodyPanel.add(new JLabel("Messaggio:"), BorderLayout.NORTH);
+		//bodyPanel.add(new JLabel("Messaggio:"), BorderLayout.NORTH);
 		bodyPanel.add(newEmailPanel.getContentTextArea(), BorderLayout.CENTER);
-
+        bodyPanel.setBorder(BorderFactory.createTitledBorder("Testo Messaggio"));
 		JPanel footerPanel = new JPanel();
 		footerPanel.setLayout(new BorderLayout());
 		
@@ -229,47 +235,53 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		footerPanel.add(sendMailButton, BorderLayout.SOUTH);
 
 		formPanel.add(headerPanel, BorderLayout.NORTH);
-		formPanel.add(bodyPanel, BorderLayout.CENTER);
+		formPanel.add(bodyPanel);
 		formPanel.add(footerPanel, BorderLayout.SOUTH);
 
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.BOTH;
 		interactiveRightPanel.add(formPanel,c);
 		interactiveRightPanel.revalidate();
 		return interactiveRightPanel;				
 	}
 
 	@Override
-	public JPanel readEmailPanel(GridBagConstraints c) {
+	public JPanel readEmailPanel() {
 
-	    		/*TODO: idem come sopra...non mi sono assorto quando ho fatto le classi di questi errori. Da correggere assolutamente! Otteniamo un codice molto più leggibile e snello  */
+	    /*TODO: idem come sopra...non mi sono assorto quando ho fatto le classi di questi errori. Da correggere assolutamente! Otteniamo un codice molto più leggibile e snello  */
 
         interactiveRightPanel.removeAll();
+        interactiveRightPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
 		JPanel readPanel = new JPanel(new BorderLayout());		
 		JPanel headerPanel = new JPanel();
-		headerPanel.setLayout(new GridLayout(6, 2));
-		headerPanel.add(new JLabel("Da:"));
-		headerPanel.add(readEmailPanel);
-
-		headerPanel.add(new JLabel("A:"));
-		headerPanel.add(readEmailPanel.getToLabel());
-
-		headerPanel.add(new JLabel("Oggetto:"));
-		headerPanel.add(readEmailPanel.getSubjectLabel());
+        headerPanel.setLayout(new GridLayout(3, 1)); //TODO Da convertire in gridbaglayout
+		headerPanel.add(new JLabel("DA: "+readEmailPanel.getFromLabel().getText())); //TODO Il getText è un workaround. Valutare se far ritornare direttamente una stringa invece che la label
+		//headerPanel.add(readEmailPanel.getFromLabel());
+		headerPanel.add(new JLabel("A: "+readEmailPanel.getToLabel().getText())); //TODO Idem sopra
+		//headerPanel.add(readEmailPanel.getToLabel());
+		headerPanel.add(new JLabel("OGGETTO: "+readEmailPanel.getSubjectLabel().getText())); //TODO Idem sopra
+		//headerPanel.add(readEmailPanel.getSubjectLabel());
+		headerPanel.setBorder(BorderFactory.createTitledBorder("Dati"));
+        headerPanel.setBackground(Color.WHITE);
 
 		JPanel bodyPanel = new JPanel();
 		bodyPanel.setLayout(new BorderLayout());
-		bodyPanel.add(new JLabel("Messaggio:"), BorderLayout.NORTH);
-		bodyPanel.add(readEmailPanel.getTxtLabel(), BorderLayout.CENTER);
-
-		JPanel footerPanel = new JPanel();
-		footerPanel.setLayout(new BorderLayout());
-		
-		JButton sendMailButton = new JButton("Invia email");
-		footerPanel.add(sendMailButton, BorderLayout.SOUTH);
+		bodyPanel.add(readEmailPanel.getTxtLabel());
+		bodyPanel.setBorder(BorderFactory.createTitledBorder("Testo Messaggio"));
 
 		readPanel.add(headerPanel, BorderLayout.NORTH);
-		readPanel.add(bodyPanel, BorderLayout.CENTER);
-		readPanel.add(footerPanel, BorderLayout.SOUTH);
-		
+		readPanel.add(bodyPanel);
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.BOTH;
 		interactiveRightPanel.add(readPanel,c);
 		interactiveRightPanel.revalidate();
 		return interactiveRightPanel;		
@@ -278,10 +290,11 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 
 //Classe di visualizzazione della lista di email
-class MyListCellRenderer extends JLabel implements ListCellRenderer<Email> {
+class MyListCellRenderer extends JCheckBox implements ListCellRenderer<Email> {
 
 	public MyListCellRenderer() {
 		setOpaque(true);
+
 	}
 
 	@Override
@@ -297,20 +310,20 @@ class MyListCellRenderer extends JLabel implements ListCellRenderer<Email> {
 		int prior = label.getPriorEmail();
 		String labelText = "<html>Mittente: " + mitt + "<br/>Oggetto: " + arg;
 		setText(labelText);
-	
+
 		ImageIcon imageIcon;
 		if (isRead == false) {
 			imageIcon = new ImageIcon(getClass().getResource("/newMail.png"));
 		} else {
 			imageIcon = new ImageIcon(getClass().getResource("/openedEmail.png"));
 		}
-		setIcon(imageIcon);		
+		setIcon(imageIcon);
 		
 		if (isSelected) {
 			setBackground(list.getSelectionBackground());
 			setForeground(list.getSelectionForeground());
 		} else {
-			setBackground(list.getBackground());
+            setBackground(list.getBackground());
 			setForeground(list.getForeground());
 		}
 		return this;
