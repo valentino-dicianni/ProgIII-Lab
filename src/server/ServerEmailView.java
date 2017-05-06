@@ -17,6 +17,7 @@ interface ServerEmailInterfaceView {
 public class ServerEmailView extends JPanel implements ServerEmailInterfaceView, Observer {
     private ServerEmailController serverEmailCtrl;
 
+
     public ServerEmailView(ServerEmailController serverEmailCtrl){
         this.serverEmailCtrl = serverEmailCtrl;
         setLayout(new GridBagLayout());
@@ -30,26 +31,10 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         c.insets = new Insets(10,10,10,10);
 
         c.fill = GridBagConstraints.BOTH;
-        add(mainPanel(), c);
+        add(new LogPanel(), c);
     }
 
-    private JPanel mainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-       // JLabel logLabel = new JLabel("Log");
-        JTextArea logTxtArea = new JTextArea();
-        JButton cleanButton = new JButton("Pulisci log");
 
-        mainPanel.setBorder(BorderFactory.createTitledBorder("LOG"));
-
-        logTxtArea.setEditable(false);
-        logTxtArea.setBackground(Color.BLACK);
-        logTxtArea.setForeground(Color.WHITE);
-        logTxtArea.setText("Prova prova ...");
-       // mainPanel.add(logLabel,BorderLayout.NORTH);
-        mainPanel.add(logTxtArea,BorderLayout.CENTER);
-        mainPanel.add(cleanButton,BorderLayout.SOUTH);
-        return mainPanel;
-    }
 
     @Override
     public void update(Observable o, Object arg) {
