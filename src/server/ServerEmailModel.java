@@ -40,10 +40,10 @@ public class ServerEmailModel extends Observable {
                 Naming.rebind("rmi://127.0.0.1:2000/Log", this);
             }
             catch (Exception e) {
-                System.err.println("Failed to bind to RMI Registry" + e);
+                System.err.println("Bind a RMI Registry fallito" + e);
                 System.exit(1);
             }
-            System.out.println("Server attivo (compute)...");
+            System.out.println("Server attivo...");
         }
 
         public String getTestoLog() {

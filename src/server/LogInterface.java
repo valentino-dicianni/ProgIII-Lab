@@ -11,4 +11,5 @@ import java.rmi.RemoteException;
 /* Interfaccia che estende Remote per funzionamento RMI (interfaccia che il client usa per chiamare il metodo appendToLog ) */
 public interface LogInterface extends Remote{
     void appendToLog(String testoLog) throws RemoteException;
+
 }

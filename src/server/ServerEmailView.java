@@ -32,7 +32,7 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         c.insets = new Insets(10, 10, 10, 10);
 
         c.fill = GridBagConstraints.BOTH;
-        add(logAreaPanel("Inizializzazione log fasulla"), c);
+        add(logAreaPanel("Inizializzazione Log - Server operativo"), c);
         c.gridx = 1;
         c.gridy = 0;
         c.weightx = 0.1;
