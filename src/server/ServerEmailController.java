@@ -1,7 +1,9 @@
 package server;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.Date;
 
 /**
@@ -9,6 +11,7 @@ import java.util.Date;
  */
 public class ServerEmailController implements ActionListener {
     private ServerEmailModel serverEmailMod;
+    private ServerEmailModel.Log log;
 
     public ServerEmailController(ServerEmailModel serverEmailMod){
         this.serverEmailMod = serverEmailMod;
@@ -16,10 +19,15 @@ public class ServerEmailController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        serverEmailMod.clearLog(serverEmailMod.getLog());
+        serverEmailMod.log.clearLog();
     }
 
-    public Log createLog(int idLog, String nomeLog, String textLog, Date dataCreazioneLog) {
-        return serverEmailMod.addLog(idLog,nomeLog,textLog,dataCreazioneLog);
+    public ServerEmailModel.Log createLog(int idLog, String nomeLog, String textLog, Date dataCreazioneLog) {
+        try {
+            return serverEmailMod.addLog(idLog,nomeLog,textLog,dataCreazioneLog);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

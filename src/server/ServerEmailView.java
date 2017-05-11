@@ -18,7 +18,6 @@ interface ServerEmailInterfaceView {
 
 public class ServerEmailView extends JPanel implements ServerEmailInterfaceView, Observer {
     private ServerEmailController serverEmailCtrl;
-    private Log log;
     private JTextArea logTxtArea = new JTextArea();
 
     public ServerEmailView(ServerEmailController serverEmailCtrl) {
@@ -36,12 +35,11 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         add(logAreaPanel("Inizializzazione log fasulla"), c);
         c.gridx = 1;
         c.gridy = 0;
-        /*c.ipady = 10;*/
         c.weightx = 0.1;
         c.fill = GridBagConstraints.HORIZONTAL;
         add(logOptions(),c);
 
-        log = serverEmailCtrl.createLog(1,"log1",logTxtArea.getText(),null);
+        serverEmailCtrl.createLog(1,"log1",logTxtArea.getText(),null);
     }
 
     private JPanel logAreaPanel(String text) {
@@ -96,19 +94,18 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
             }
         });
 
-       // buttonGroup.
-
         logOptionsPanel.add(colorCheckBoxBG,BorderLayout.NORTH);
         logOptionsPanel.add(colorCheckBoxBW,BorderLayout.CENTER);
         logOptionsPanel.add(colorCheckBoxWB,BorderLayout.SOUTH);
         return logOptionsPanel;
     }
 
+    /* Una volta inviata una notifica dall'Observable, il seguente metodo viene eseguito. L'argomento arg, per ora, contiene un oggetto Log
+     * E' necessario fare il parsing in quanto nel metodo update, arg è un argomento di tipo oggetto generico */
     @Override
     public void update(Observable o, Object arg) {
-        if(arg instanceof Log){
-            this.log = (Log)arg;
-            logTxtArea.setText(this.log.getTestoLog());
+        if(arg instanceof ServerEmailModel.Log){
+            logTxtArea.setText(((ServerEmailModel.Log) arg).getTestoLog());
         }
     }
 }

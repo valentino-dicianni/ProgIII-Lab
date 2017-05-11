@@ -2,6 +2,7 @@ package server;
 
 import javax.swing.*;
 import java.awt.*;
+import java.rmi.RemoteException;
 
 /**
  * Created by Daniele on 05/05/2017.
@@ -16,7 +17,8 @@ public class ServerPigMail extends JFrame {
         ServerEmailController serverEmailCtrl = new ServerEmailController(serverEmailMod);
 
         // View
-        ServerEmailView serverEmailView = new ServerEmailView(serverEmailCtrl);
+        ServerEmailView serverEmailView = null;
+        serverEmailView = new ServerEmailView(serverEmailCtrl);
 
         //Instaurazione relazione observer-observerable tra vista (Observer) e modello (Observable)
         serverEmailMod.addObserver(serverEmailView);

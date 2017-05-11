@@ -1,12 +1,12 @@
 package client;
 
-import server.ServerEmailController;
-import server.ServerPigMail;
+
+
+import server.LogInterface;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.DefaultMetalTheme;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
+import java.net.InetAddress;
+import java.rmi.Naming;
 
 public class PigMail extends JFrame {
 
@@ -101,5 +101,16 @@ public class PigMail extends JFrame {
 		// TODO Auto-generated method stub
 		PigMail client = new PigMail("Franz");
 		//ServerPigMail server = new ServerPigMail();
+
+		try {
+			//LogInterface server = (LogInterface) Naming.lookup("rmi://127.0.0.1:2000/Log"); // cerco il server sulla porta 2000
+			LogInterface server = (LogInterface) Naming.lookup("rmi://127.0.0.1:2000/Log");
+
+			System.out.println("Sto per invocare il metodo sul server");
+			server.appendToLog("Client connesso - "+ InetAddress.getLocalHost());
+			//System.out.println(result.intValue());
+		}
+		catch(Exception e) {e.printStackTrace();}
 	}
+
 }

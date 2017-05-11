@@ -8,7 +8,7 @@ import java.util.Observable;
 public class ClientEmailModel extends Observable {
 
 	private String nomeAcClient, emailClient;
-    private DefaultListModel list = new DefaultListModel();;
+    private DefaultListModel list = new DefaultListModel();
 
 	public ClientEmailModel(String nomeAcClient, String emailClient) {
 		this.nomeAcClient = nomeAcClient;
