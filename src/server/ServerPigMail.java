@@ -32,7 +32,12 @@ public class ServerPigMail extends JFrame {
     }
 
     public static void main(String[] args) {
-        ServerPigMail server = new ServerPigMail();
+        try {
+            ServerPigMail server = new ServerPigMail();
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Failed to create Server", "createServerError", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
 

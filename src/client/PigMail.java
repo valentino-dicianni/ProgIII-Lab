@@ -43,6 +43,7 @@ public class PigMail extends JFrame {
 			e.printStackTrace();
 		}
 
+
 		// Modello
 		ClientEmailModel clientMailMod = new ClientEmailModel(nickname, "user1@mail.it");
 
