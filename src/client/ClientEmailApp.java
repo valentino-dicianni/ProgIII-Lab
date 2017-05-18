@@ -17,9 +17,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PigMail extends JFrame {
+public class ClientEmailApp extends JFrame {
 
-	public PigMail(String nickname) {
+	public ClientEmailApp(String nickname) {
 
 		//Dialog da guerra per comodità.. (se il prefisso dell'indirizzo locale non è come indicato nell'argomento initialSelectionValue, modificare a piacimento)
 		String ipServer = JOptionPane.showInputDialog(null,"Inserire indirizzo IP locale del server","192.168.0.x");
@@ -159,7 +159,7 @@ public class PigMail extends JFrame {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		PigMail client = new PigMail("Franz");
+		ClientEmailApp client = new ClientEmailApp("Franz");
 	}
 
 }

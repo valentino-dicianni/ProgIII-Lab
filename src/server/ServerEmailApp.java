@@ -1,15 +1,13 @@
 package server;
 
 import javax.swing.*;
-import java.awt.*;
-import java.rmi.RemoteException;
 
 /**
  * Created by Daniele on 05/05/2017.
  */
-public class ServerPigMail extends JFrame {
+public class ServerEmailApp extends JFrame {
 
-    public ServerPigMail(){
+    public ServerEmailApp(){
         // Modello
         ServerEmailModel serverEmailMod = new ServerEmailModel();
 
@@ -33,7 +31,7 @@ public class ServerPigMail extends JFrame {
 
     public static void main(String[] args) {
         try {
-            ServerPigMail server = new ServerPigMail();
+            ServerEmailApp server = new ServerEmailApp();
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to create Server", "createServerError", JOptionPane.ERROR_MESSAGE);

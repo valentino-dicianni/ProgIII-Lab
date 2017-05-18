@@ -140,7 +140,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
         c.weightx = 1;
         c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
-		JLabel label = new JLabel("Benvenuto su PigMail");		
+		JLabel label = new JLabel("Bentornato");
 		interactiveRightPanel.add(label);
 		interactiveRightPanel.revalidate();
 		return interactiveRightPanel;
