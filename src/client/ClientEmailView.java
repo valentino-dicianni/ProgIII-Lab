@@ -25,10 +25,17 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	private JList<Email> list =  new JList<Email>();
 	
 	//New email form panel	
-	private NewEmailPanel newEmailPanel = new NewEmailPanel();
+	private JTextField fromField = new JTextField();
+	private JTextField toField = new JTextField();
+	private JTextField subjectField = new JTextField();
+	private JTextArea contentTextArea = new JTextArea();
+
 
 	//read email panel
-    private ReadEmailPanel readEmailPanel = new ReadEmailPanel();
+	private JLabel fromLabel = new JLabel();
+	private JLabel toLabel = new JLabel();
+	private JLabel subjectLabel = new JLabel();
+	private JLabel txtLabel = new JLabel();
 
 	public ClientEmailView(ClientEmailController clientEmailCtrl) {
 		this.clientEmailCtrl = clientEmailCtrl;
@@ -192,10 +199,10 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	@Override
 	public void updateEmailListGUI(Email selectedEmail) {		
 		list.setCellRenderer(new MyListCellRenderer());
-		readEmailPanel.getFromLabel().setText(selectedEmail.getMittEmail());
-		readEmailPanel.getToLabel().setText(selectedEmail.getDestEmail());
-		readEmailPanel.getSubjectLabel().setText(selectedEmail.getArgEmail());
-		readEmailPanel.getTxtLabel().setText(selectedEmail.getTestoEmail());
+		fromLabel.setText(selectedEmail.getMittEmail());
+		toLabel.setText(selectedEmail.getDestEmail());
+		subjectLabel.setText(selectedEmail.getArgEmail());
+		txtLabel.setText(selectedEmail.getTestoEmail());
 	}
 
 	@Override
@@ -216,15 +223,18 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 		/*TODO: N.B da modificare i destinatari...aggiungere un campo "Cc" dove si ha la possibilità di aggiungere altri destinatari*/
 		headerPanel.add(new JLabel("A:"));
-		headerPanel.add(newEmailPanel.getToField());
+		headerPanel.add(toField);
 
 		headerPanel.add(new JLabel("Oggetto:"));
-		headerPanel.add(newEmailPanel.getSubjectField());
+		headerPanel.add(subjectField);
 		headerPanel.setBorder(BorderFactory.createTitledBorder("Invia Nuova Mail"));
 		JPanel bodyPanel = new JPanel();
 		bodyPanel.setLayout(new BorderLayout());
 		//bodyPanel.add(new JLabel("Messaggio:"), BorderLayout.NORTH);
-		bodyPanel.add(newEmailPanel.getContentTextArea(), BorderLayout.CENTER);
+		contentTextArea.setLineWrap(true);
+		contentTextArea.setWrapStyleWord(true);
+		contentTextArea.setPreferredSize(new Dimension(1,1));
+		bodyPanel.add(contentTextArea, BorderLayout.CENTER);
         bodyPanel.setBorder(BorderFactory.createTitledBorder("Testo Messaggio"));
 		JPanel footerPanel = new JPanel();
 		footerPanel.setLayout(new BorderLayout());
@@ -258,18 +268,18 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		JPanel readPanel = new JPanel(new BorderLayout());		
 		JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new GridLayout(3, 1)); //TODO Da convertire in gridbaglayout
-		headerPanel.add(new JLabel("DA: "+readEmailPanel.getFromLabel().getText())); //TODO Il getText è un workaround. Valutare se far ritornare direttamente una stringa invece che la label
+		headerPanel.add(new JLabel("DA: "+fromLabel.getText())); //TODO Il getText è un workaround. Valutare se far ritornare direttamente una stringa invece che la label
 		//headerPanel.add(readEmailPanel.getFromLabel());
-		headerPanel.add(new JLabel("A: "+readEmailPanel.getToLabel().getText())); //TODO Idem sopra
+		headerPanel.add(new JLabel("A: "+toLabel.getText())); //TODO Idem sopra
 		//headerPanel.add(readEmailPanel.getToLabel());
-		headerPanel.add(new JLabel("OGGETTO: "+readEmailPanel.getSubjectLabel().getText())); //TODO Idem sopra
+		headerPanel.add(new JLabel("OGGETTO: "+subjectLabel.getText())); //TODO Idem sopra
 		//headerPanel.add(readEmailPanel.getSubjectLabel());
 		headerPanel.setBorder(BorderFactory.createTitledBorder("Dati"));
         headerPanel.setBackground(Color.WHITE);
 
 		JPanel bodyPanel = new JPanel();
 		bodyPanel.setLayout(new BorderLayout());
-		bodyPanel.add(readEmailPanel.getTxtLabel());
+		bodyPanel.add(txtLabel);
 		bodyPanel.setBorder(BorderFactory.createTitledBorder("Testo Messaggio"));
 
 		readPanel.add(headerPanel, BorderLayout.NORTH);

@@ -19,7 +19,6 @@ public class ServerEmailModel extends Observable {
         private Date dataCreazione;
         private int idLog;
 
-
         public Log(int idLog, String nomeLog, String testoLog, Date dataCreazione) throws RemoteException {
 
             this.idLog = idLog;
