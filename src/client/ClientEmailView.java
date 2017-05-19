@@ -207,9 +207,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	@Override
 	public JPanel newEmailPanel() {
-
-	    /*TODO: Modificare la classe newEmailPanel mettendoci queste cose...questo metodo deve solo staccare da interactiveRightPanel il pannello di prima e attaccarci un nuovo newEmailPanel */
-
         interactiveRightPanel.removeAll();
         interactiveRightPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -258,9 +255,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	@Override
 	public JPanel readEmailPanel() {
-
-	    /*TODO: idem come sopra...non mi sono assorto quando ho fatto le classi di questi errori. Da correggere assolutamente! Otteniamo un codice molto più leggibile e snello  */
-
         interactiveRightPanel.removeAll();
         interactiveRightPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

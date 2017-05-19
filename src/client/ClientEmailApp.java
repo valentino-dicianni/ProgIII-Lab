@@ -19,10 +19,11 @@ import java.util.Date;
 
 public class ClientEmailApp extends JFrame {
     private String emailAddress;
+    private String nickname;
 
 	public ClientEmailApp(String nickname, String emailAddress) {
 
-		// Modello
+		// Model
 		ClientEmailModel clientMailMod = new ClientEmailModel(nickname, emailAddress);
 
 		// Controller
@@ -31,15 +32,16 @@ public class ClientEmailApp extends JFrame {
 		// View
 		ClientEmailView clientEmailView = new ClientEmailView(clientEmailCtrl);
 
-		//Instaurazione relazione observer-observerable tra vista (Observer) e modello (Observable)
+		this.emailAddress = emailAddress;
+		this.nickname = nickname;
+
+        //Instaurazione relazione observer-observerable tra vista (Observer) e modello (Observable)
 		clientMailMod.addObserver(clientEmailView);
         clientEmailCtrl.setMailList();
 		add(clientEmailView);
 
-		//setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-		WindowListener exitListener = new WindowAdapter() {
+        WindowListener exitListener = new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -64,7 +66,6 @@ public class ClientEmailApp extends JFrame {
 
 		addWindowListener(exitListener);
         setTitle("Email di " + nickname);
-        this.emailAddress = emailAddress;
 
         pack();
         setSize(1000, 700);
@@ -122,7 +123,7 @@ public class ClientEmailApp extends JFrame {
 	}*/
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// TODO creare un input panel per chiedere nickname e emailAddress per poterlo personalizzare
 		ClientEmailApp client = new ClientEmailApp("Franz", "user@gmail.com");
 	}
 

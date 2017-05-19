@@ -11,7 +11,6 @@ import java.util.Date;
  */
 public class ServerEmailController implements ActionListener {
     private ServerEmailModel serverEmailMod;
-    private ServerEmailModel.Log log;
 
     public ServerEmailController(ServerEmailModel serverEmailMod){
         this.serverEmailMod = serverEmailMod;
@@ -19,7 +18,7 @@ public class ServerEmailController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        serverEmailMod.log.clearLog();
+        serverEmailMod.getLogServer().clearLog();
     }
 
     public ServerEmailModel.Log createLog(int idLog, String nomeLog, String textLog, Date dataCreazioneLog) {
