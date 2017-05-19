@@ -37,8 +37,9 @@ public class ClientEmailApp extends JFrame {
 		add(clientEmailView);
 
 		//setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		/*WindowListener exitListener = new WindowAdapter() {
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+		WindowListener exitListener = new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -47,29 +48,13 @@ public class ClientEmailApp extends JFrame {
 						"Conferma chiusura applicazione", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
+				    clientMailMod.closeOperation();
+                    System.exit(0);
+                }
 
-					try {LogInterface server = (LogInterface) Naming.lookup("rmi://"+ipServer+":2000/Log");
-						System.out.println("Sto per invocare il metodo sul server");
-						DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss"); //esempio alternativa: SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-						Date date = new Date();
-						server.appendToLog("[ "+dateFormat.format(date)+" - Utente "+nickname+"] Client disconnesso - " + InetAddress.getLocalHost());
-						//TODO Idem todo sopra
-					} catch (NotBoundException e1) {
-						e1.printStackTrace();
-					} catch (MalformedURLException e1) {
-						e1.printStackTrace();
-					} catch (RemoteException e1) {
-						e1.printStackTrace();
-					} catch (UnknownHostException e1) {
-						e1.printStackTrace();
-					}
-					finally {
-						//todo aggiungere altro eventuale cleanup
-						System.exit(0);
-					}
-				}
+
 			}
-		};*/
+		};
 
 		//Serve per il tema, in testing
 		//initLookAndFeel();
@@ -77,7 +62,7 @@ public class ClientEmailApp extends JFrame {
 		//setDefaultLookAndFeelDecorated(true);
 
 
-		//addWindowListener(exitListener);
+		addWindowListener(exitListener);
         setTitle("Email di " + nickname);
         this.emailAddress = emailAddress;
 

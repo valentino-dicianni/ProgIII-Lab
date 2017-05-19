@@ -87,7 +87,7 @@ public class ServerEmailModel extends Observable {
             String header = null;
             try {
                //TODO aggiungere nome del client all'header
-                header = "[ "+dateFormat.format(date)+ "Client IP:"+getClientHost()+"] - ";
+                header = "[ "+dateFormat.format(date)+ " Client IP:"+getClientHost()+"] - ";
             } catch (ServerNotActiveException e) {
                 e.printStackTrace();
             }
