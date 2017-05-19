@@ -37,7 +37,7 @@ public class ClientEmailApp extends JFrame {
 		add(clientEmailView);
 
 		//setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		/*WindowListener exitListener = new WindowAdapter() {
 
 			@Override

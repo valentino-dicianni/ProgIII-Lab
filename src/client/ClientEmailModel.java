@@ -29,7 +29,7 @@ public class ClientEmailModel extends Observable {
             System.out.print("Client connesso al server");
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             Date date = new Date();
-            server.appendToLog("[ "+dateFormat.format(date)+" - Utente "+nomeAcClient+"] Client connesso - "+ InetAddress.getLocalHost());
+            server.appendToLog("Client connesso");
 
         }
         catch(Exception e) {

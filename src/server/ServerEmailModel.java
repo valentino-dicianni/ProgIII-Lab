@@ -2,7 +2,10 @@ package server;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,8 +80,23 @@ public class ServerEmailModel extends Observable {
             this.idLog = idLog;
         }
 
+        public String newMessageLog(String content){
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss"); //esempio alternativa: SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+            Date date = new Date();
+            String newLogMessage;
+            String header = null;
+            try {
+               //TODO aggiungere nome del client all'header
+                header = "[ "+dateFormat.format(date)+ "Client IP:"+getClientHost()+"] - ";
+            } catch (ServerNotActiveException e) {
+                e.printStackTrace();
+            }
+            newLogMessage = header + content;
+            return newLogMessage;
+        }
+
         public void appendToLog(String testoLog){
-            setTestoLog(getTestoLog()+"\n"+testoLog);
+            setTestoLog(getTestoLog()+"\n"+newMessageLog(testoLog));
             System.out.println("Metodo server eseguito in seguito a richiesta client, nuovo log: "+getTestoLog());
             setChanged();
             notifyObservers(this);
