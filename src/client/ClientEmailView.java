@@ -1,6 +1,8 @@
 package client;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.Observable;
@@ -237,6 +239,15 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		footerPanel.setLayout(new BorderLayout());
 		
 		JButton sendMailButton = new JButton("Invia email");
+
+		//todo capire eventualmente come fare per mettere l'actionlistener nel controller mandando pure i valori
+		sendMailButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientEmailCtrl.newEmail(toField.getText(),subjectField.getText(),contentTextArea.getText());
+			}
+		});
+
 		footerPanel.add(sendMailButton, BorderLayout.SOUTH);
 
 		formPanel.add(headerPanel, BorderLayout.NORTH);

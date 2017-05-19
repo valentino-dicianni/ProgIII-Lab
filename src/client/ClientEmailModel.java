@@ -46,9 +46,7 @@ public class ClientEmailModel extends Observable {
 	/* metodo per set email come letta, notifica agli observers */
 
 	public void openEmail(Email selectedEmail) {
-
 		selectedEmail.setRead(true);
-
 		setChanged();
 		notifyObservers(selectedEmail);
 	}
@@ -95,5 +93,9 @@ public class ClientEmailModel extends Observable {
 			System.exit(0);
 
 		}
+	}
+
+	public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
+		new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false);
 	}
 }

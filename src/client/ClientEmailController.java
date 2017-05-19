@@ -55,4 +55,9 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	public void setMailList(){
 	    clientEmailMod.showMail();
     }
+
+	public void newEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
+		clientEmailMod.sendEmail(toFieldText,subjectFieldText,contentFieldText);
+
+	}
 }
