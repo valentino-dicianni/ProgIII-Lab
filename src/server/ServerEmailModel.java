@@ -3,7 +3,9 @@ package server;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Observable;
 
 /**
@@ -13,6 +15,8 @@ import java.util.Observable;
 
 public class ServerEmailModel extends Observable {
     public Log log;
+    private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
+
 
     public class Log extends UnicastRemoteObject implements LogInterface{
         private String  nomeLog, testoLog;
@@ -31,12 +35,12 @@ public class ServerEmailModel extends Observable {
 
             // creo il SecurityManager, se non esiste già
             try {
-                if (System.getSecurityManager() == null)
-                    System.setSecurityManager(new SecurityManager());
+                if (System.getSecurityManager() == null) {System.setSecurityManager(new SecurityManager());}
+
                 // creo registry che ascolta su una specifica porta
                 java.rmi.registry.LocateRegistry.createRegistry(2000);
                 // binding del server su rmiregistry alla porta opportuna
-                Naming.rebind("rmi://127.0.0.1:2000/Log", this);
+                Naming.rebind("rmi://127.0.0.1:2000/server", this);
             }
             catch (Exception e) {
                 System.err.println("Bind a RMI Registry fallito" + e);
@@ -92,6 +96,21 @@ public class ServerEmailModel extends Observable {
     }
     public Log getLogServer() {
         return log;
+    }
+
+
+    public void inviaMail(Email mail){
+        if(serverMailList.containsKey(mail.getDestEmail())){
+            serverMailList.get(mail.getDestEmail()).add(mail);
+        }
+        else{
+            ArrayList<Email> emailList = new ArrayList<>();
+            emailList.add(mail);
+            serverMailList.put(mail.getDestEmail(), emailList);
+        }
+    }
+    public ArrayList<Email> getEmail(String address){
+        return serverMailList.get(address);
     }
 
 

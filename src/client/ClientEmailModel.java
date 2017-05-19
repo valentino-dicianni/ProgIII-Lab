@@ -1,19 +1,42 @@
 package client;
 
 
+import server.LogInterface;
+
 import javax.swing.*;
 
+import java.net.InetAddress;
+import java.rmi.Naming;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Observable;
 
 public class ClientEmailModel extends Observable {
 
 	private String nomeAcClient, emailClient;
 	private DefaultListModel list = new DefaultListModel();
+	private LogInterface server;
 
 	public ClientEmailModel(String nomeAcClient, String emailClient) {
 		this.nomeAcClient = nomeAcClient;
 		this.emailClient = emailClient;
-	}
+        String ipServer = JOptionPane.showInputDialog(null,"Inserire indirizzo IP locale del server","192.168.0.x");
+
+
+        try {
+            server = (LogInterface) Naming.lookup("rmi://"+ipServer+":2000/server");
+            System.out.print("Client connesso al server");
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            Date date = new Date();
+            server.appendToLog("[ "+dateFormat.format(date)+" - Utente "+nomeAcClient+"] Client connesso - "+ InetAddress.getLocalHost());
+
+        }
+        catch(Exception e) {
+            System.out.println("Failed to find distributor" + e.getMessage());
+        }
+    }
+
 
 	public String getNomeAcClient() {
 		return nomeAcClient;
