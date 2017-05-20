@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.rmi.RemoteException;
 import java.util.Observable;
 import java.util.Observer;
 import javax.imageio.ImageIO;
@@ -244,7 +245,11 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		sendMailButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clientEmailCtrl.newEmail(toField.getText(),subjectField.getText(),contentTextArea.getText());
+				try {
+					clientEmailCtrl.newEmail(toField.getText(),subjectField.getText(),contentTextArea.getText());
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 

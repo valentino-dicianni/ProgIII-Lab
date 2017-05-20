@@ -20,7 +20,14 @@ public class ServerEmailModel extends Observable {
     private Log log;
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
 
+    public void setServerMailList() {
+        Email mail = new Email("me", "te", "prova","ciao", 1 , null, false);
+        ArrayList<Email> al = new ArrayList<Email>();
+        al.add(mail);
+        this.serverMailList.put("user@gmail.com", al);
+    }
 
+    //classe Log
     public class Log extends UnicastRemoteObject implements LogInterface{
         private String  nomeLog, testoLog;
         private Date dataCreazione;
@@ -106,7 +113,24 @@ public class ServerEmailModel extends Observable {
             setChanged();
             notifyObservers(this);
         }
-    }
+
+
+        public synchronized void inviaMail(Email mail) {
+            if(serverMailList.containsKey(mail.getDestEmail())){
+                serverMailList.get(mail.getDestEmail()).add(mail);
+                appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
+            }
+            else{
+                ArrayList<Email> emailList = new ArrayList<>();
+                emailList.add(mail);
+                serverMailList.put(mail.getDestEmail(), emailList);
+            }
+        }
+        public Email getEmail(String address){
+            return serverMailList.get(address).get(0);
+        }
+    }//fine Class Log
+
 
     public Log addLog(int idLog, String nomeLog, String textLog, Date dataCreazioneLog) throws RemoteException {
         log= new Log(idLog,nomeLog,textLog,dataCreazioneLog);
@@ -117,19 +141,7 @@ public class ServerEmailModel extends Observable {
     }
 
 
-    public void inviaMail(Email mail){
-        if(serverMailList.containsKey(mail.getDestEmail())){
-            serverMailList.get(mail.getDestEmail()).add(mail);
-        }
-        else{
-            ArrayList<Email> emailList = new ArrayList<>();
-            emailList.add(mail);
-            serverMailList.put(mail.getDestEmail(), emailList);
-        }
-    }
-    public ArrayList<Email> getEmail(String address){
-        return serverMailList.get(address);
-    }
+
 
 
 }

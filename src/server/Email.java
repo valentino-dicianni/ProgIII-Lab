@@ -1,8 +1,9 @@
 package server;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Email {
+public class Email implements Serializable {
   	private String mittEmail, destEmail, argEmail, testoEmail;
   	private int priorEmail;
   	private Date dataSpedEmail;

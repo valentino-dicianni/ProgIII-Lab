@@ -11,5 +11,7 @@ import java.rmi.RemoteException;
 /* Interfaccia che estende Remote per funzionamento RMI*/
 public interface LogInterface extends Remote{
     void appendToLog(String testoLog) throws RemoteException;
+    void inviaMail(Email mail) throws RemoteException;
+    Email getEmail(String address) throws RemoteException;
 
 }

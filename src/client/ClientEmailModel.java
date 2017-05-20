@@ -1,9 +1,11 @@
 package client;
 
+import jdk.internal.cmm.SystemResourcePressureImpl;
 import server.LogInterface;
 import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Observable;
 
 
@@ -13,6 +15,7 @@ public class ClientEmailModel extends Observable {
 	private String nomeAcClient, emailClient;
 	private DefaultListModel list = new DefaultListModel();
 	private String ipServer;
+	private RefreshMailThread refreshThread = new RefreshMailThread(this);
 
 	public ClientEmailModel(String nomeAcClient, String emailClient) {
 		this.nomeAcClient = nomeAcClient;
@@ -21,13 +24,16 @@ public class ClientEmailModel extends Observable {
 
         try {
             server = (LogInterface) Naming.lookup("rmi://"+ipServer+":2000/server");
-            System.out.print("Client connesso al server");
+            System.out.println("Client connesso al server");
             server.appendToLog("Client connesso");
+
 
         }
         catch(Exception e) {
             System.out.println("Failed to find distributor" + e.getMessage());
         }
+        //start refresh list thread
+        //new Thread(refreshThread).start();
     }
 
 	public String getNomeAcClient() {
@@ -38,7 +44,11 @@ public class ClientEmailModel extends Observable {
 		return emailClient;
 	}
 
-	public String toString() {
+    public LogInterface getServer() {
+        return server;
+    }
+
+    public String toString() {
 		return ("Modello della Mail di " + nomeAcClient);
 
 	}
@@ -95,7 +105,36 @@ public class ClientEmailModel extends Observable {
 		}
 	}
 
-	public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
-		new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false);
+	public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
+		server.inviaMail(new server.Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
+        System.out.println("Email inviata con successo al server...");
 	}
+
+
+
+
+}
+
+
+//NON FUNZIONA ANCORA --> Non riesco a fare il fetch della lista mail con rmi...
+class RefreshMailThread implements Runnable {
+    ClientEmailModel model;
+    public void run() {
+        System.out.println(Thread.currentThread().getName() + " di " + model.getEmailClient());
+        while(true){
+            try {
+                Thread.sleep(100);
+
+                server.Email em = model.getServer().getEmail(model.getEmailClient());
+                //System.out.println(arr);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public RefreshMailThread(ClientEmailModel model){this.model=model;}
 }

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
 
 
 import javax.swing.*;
@@ -56,7 +57,7 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	    clientEmailMod.showMail();
     }
 
-	public void newEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
+	public void newEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
 		clientEmailMod.sendEmail(toFieldText,subjectFieldText,contentFieldText);
 
 	}

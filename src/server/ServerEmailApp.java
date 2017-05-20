@@ -10,6 +10,7 @@ public class ServerEmailApp extends JFrame {
     public ServerEmailApp(){
         // Modello
         ServerEmailModel serverEmailMod = new ServerEmailModel();
+        //serverEmailMod.setServerMailList();
 
         // Controller
         ServerEmailController serverEmailCtrl = new ServerEmailController(serverEmailMod);
