@@ -1,5 +1,7 @@
 package server;
 
+import com.sun.org.apache.xml.internal.dtm.ref.EmptyIterator;
+
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
@@ -130,8 +132,12 @@ public class ServerEmailModel extends Observable {
         }
 
         @Override
-        public Email getEmail(String address){
-            return dummyMail;
+        public ArrayList<Email> getEmail(String address){
+            //da modificare con la lista restituita dall ricerca nella hashTable
+            ArrayList<Email> dmm = new ArrayList<>();
+            dmm.add(dummyMail);
+            dmm.add(dummyMail);
+            return dmm;
         }
         @Override
         public void deleteEmail(Email mail) throws RemoteException {
@@ -148,10 +154,10 @@ public class ServerEmailModel extends Observable {
         return log;
     }
 
-    /*
-    * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
-    * TODO @Fra965 -> implementa lettura da file
-    */
+    /**
+     * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
+     * TODO @Fra965 -> implementa lettura da file
+     */
     public ServerEmailModel(){}
 
 

@@ -175,7 +175,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			this.repaint();
 		}
 		else if(arg1 == "updateMailList"){
-            list.setModel(((ClientEmailModel)arg0).getList());
+            list.setModel(((ClientEmailModel)arg0).getMailList());
             list.setCellRenderer(new MyListCellRenderer());
             list.addMouseListener(clientEmailCtrl);
             list.setFixedCellHeight(75);
