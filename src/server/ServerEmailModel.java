@@ -19,13 +19,8 @@ import java.util.Observable;
 public class ServerEmailModel extends Observable {
     private Log log;
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
+    private Email dummyMail = new Email("me", "te", "prova","ciao", 1 , null, false);
 
-    public void setServerMailList() {
-        Email mail = new Email("me", "te", "prova","ciao", 1 , null, false);
-        ArrayList<Email> al = new ArrayList<>();
-        al.add(mail);
-        this.serverMailList.put("user@gmail.com", al);
-    }
 
     //classe Log
     public class Log extends UnicastRemoteObject implements LogInterface{
@@ -136,9 +131,8 @@ public class ServerEmailModel extends Observable {
 
         @Override
         public Email getEmail(String address){
-            return serverMailList.get(address).get(0);
+            return dummyMail;
         }
-
         @Override
         public void deleteEmail(Email mail) throws RemoteException {
 
@@ -154,8 +148,11 @@ public class ServerEmailModel extends Observable {
         return log;
     }
 
-
-
+    /*
+    * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
+    * TODO @Fra965 -> implementa lettura da file
+    */
+    public ServerEmailModel(){}
 
 
 }

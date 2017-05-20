@@ -32,7 +32,7 @@ public class ClientEmailModel extends Observable {
             System.out.println("Failed to find distributor" + e.getMessage());
         }
         //start refresh list thread
-        //new Thread(refreshThread).start();
+        new Thread(refreshThread).start();
     }
 
 	public String getNomeAcClient() {
@@ -84,6 +84,10 @@ public class ClientEmailModel extends Observable {
 		notifyObservers("updateMailList");
 	}
 
+	public void sendEmail(Email mail){
+     //   server.inviaMail(new server.Email());
+	}
+
 
     /*
     * Metodo che al momento della chiusura del client mail
@@ -121,10 +125,10 @@ class RefreshMailThread implements Runnable {
         System.out.println(Thread.currentThread().getName() + " di " + model.getEmailClient());
         while(true){
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
 
                 server.Email em = model.getServer().getEmail(model.getEmailClient());
-                //System.out.println(arr);
+                System.out.println(em);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
