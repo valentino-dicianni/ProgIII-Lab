@@ -22,7 +22,7 @@ public class ServerEmailModel extends Observable {
 
     public void setServerMailList() {
         Email mail = new Email("me", "te", "prova","ciao", 1 , null, false);
-        ArrayList<Email> al = new ArrayList<Email>();
+        ArrayList<Email> al = new ArrayList<>();
         al.add(mail);
         this.serverMailList.put("user@gmail.com", al);
     }
@@ -87,6 +87,13 @@ public class ServerEmailModel extends Observable {
             this.idLog = idLog;
         }
 
+        public void appendToLog(String testoLog){
+            setTestoLog(getTestoLog()+"\n"+newMessageLog(testoLog));
+            System.out.println("Metodo server eseguito in seguito a richiesta client, nuovo log: "+getTestoLog());
+            setChanged();
+            notifyObservers(this);
+        }
+
         public String newMessageLog(String content){
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss"); //esempio alternativa: SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
             Date date = new Date();
@@ -102,19 +109,14 @@ public class ServerEmailModel extends Observable {
             return newLogMessage;
         }
 
-        public void appendToLog(String testoLog){
-            setTestoLog(getTestoLog()+"\n"+newMessageLog(testoLog));
-            System.out.println("Metodo server eseguito in seguito a richiesta client, nuovo log: "+getTestoLog());
-            setChanged();
-            notifyObservers(this);
-        }
+
         public void clearLog(){
             setTestoLog("");
             setChanged();
             notifyObservers(this);
         }
 
-
+        @Override
         public synchronized void inviaMail(Email mail) {
             if(serverMailList.containsKey(mail.getDestEmail())){
                 serverMailList.get(mail.getDestEmail()).add(mail);
@@ -126,8 +128,20 @@ public class ServerEmailModel extends Observable {
                 serverMailList.put(mail.getDestEmail(), emailList);
             }
         }
+
+        @Override
+        public void forwardMail(Email mail) throws RemoteException {
+
+        }
+
+        @Override
         public Email getEmail(String address){
             return serverMailList.get(address).get(0);
+        }
+
+        @Override
+        public void deleteEmail(Email mail) throws RemoteException {
+
         }
     }//fine Class Log
 

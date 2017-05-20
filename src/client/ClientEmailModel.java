@@ -1,6 +1,5 @@
 package client;
 
-import jdk.internal.cmm.SystemResourcePressureImpl;
 import server.LogInterface;
 import javax.swing.*;
 import java.rmi.Naming;
@@ -86,9 +85,6 @@ public class ClientEmailModel extends Observable {
 	}
 
 
-
-/* TODO: aggiungere theread che in maniera pediodica va a fare la pool dal server centrale e se ci sono nuove mail le aggiunge alla lista e notifica gli osservatori */
-
     /*
     * Metodo che al momento della chiusura del client mail
     * notifica al server l'avvenuta chiusura.
@@ -104,7 +100,9 @@ public class ClientEmailModel extends Observable {
 
 		}
 	}
-
+    /*
+    * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server
+    */
 	public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
 		server.inviaMail(new server.Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
         System.out.println("Email inviata con successo al server...");
@@ -115,7 +113,7 @@ public class ClientEmailModel extends Observable {
 
 }
 
-
+/* TODO: aggiungere theread che in maniera pediodica va a fare la pool dal server centrale e se ci sono nuove mail le aggiunge alla lista e notifica gli osservatori */
 //NON FUNZIONA ANCORA --> Non riesco a fare il fetch della lista mail con rmi...
 class RefreshMailThread implements Runnable {
     ClientEmailModel model;
