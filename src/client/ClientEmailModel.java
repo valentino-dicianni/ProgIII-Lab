@@ -131,23 +131,29 @@ public class ClientEmailModel extends Observable {
  */
 
 class RefreshMailThread implements Runnable {
-    ClientEmailModel model;
+    private ClientEmailModel model;
+
+    public RefreshMailThread(ClientEmailModel model){this.model=model;}
+
     public void run() {
         System.out.println(Thread.currentThread().getName() + " di " + model.getEmailClient());
         while(true){
             try {
                 Thread.sleep(2000);
 
-                DefaultListModel clientList = model.getMailList();
                 ArrayList serverList = model.getServer().getEmail(model.getEmailClient());
+                DefaultListModel clientList = model.getMailList();
+                Object[] arr=clientList.toArray();
 
-                //ATTENZIONE: qui non funziona perchè Email di due classi diverse...non posso aggiungerlo
-                //TODO da modicficare, magari aggiungendo solo un intrerfaccia si risolve
+                if(serverList != null){//da controllare se funziona(in teoria si una volta che prende la vera lista mail)
+                    for (int j = arr.length-1; j >= 0; j--) {
+                        serverList.remove(arr[j]);
+                    }
 
-                for (Object mergeList : serverList) {
-                    clientList.addElement(mergeList);
+                    for (Object mergeElem : serverList) {
+                        clientList.add(0,mergeElem);
+                    }
                 }
-				  System.out.println(serverList);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -157,5 +163,4 @@ class RefreshMailThread implements Runnable {
         }
     }
 
-    public RefreshMailThread(ClientEmailModel model){this.model=model;}
 }

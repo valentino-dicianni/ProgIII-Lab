@@ -130,11 +130,11 @@ public class ServerEmailModel extends Observable {
 
         @Override
         public ArrayList<Email> getEmail(String address){
-            //da modificare con la lista restituita dall ricerca nella hashTable
-            ArrayList<Email> dmm = new ArrayList<>();
+           return serverMailList.get(address);
+           /* ArrayList<Email> dmm = new ArrayList<>();
             dmm.add(dummyMail);
             dmm.add(dummyMail);
-            return dmm;
+            return dmm;*/
         }
         @Override
         public void deleteEmail(Email mail) throws RemoteException {

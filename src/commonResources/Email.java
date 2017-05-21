@@ -76,6 +76,14 @@ public class Email implements Serializable {
 	public String getMittEmail(){
 		return mittEmail;			
 	}
-	
-	
+
+    @Override
+    public boolean equals(Object o) {
+	    Email mail = (Email)o;
+        if(this.mittEmail.equals(mail.getMittEmail()) &&
+                this.destEmail.equals(mail.getDestEmail()) &&
+                this.argEmail.equals(mail.getArgEmail()) &&
+                this.testoEmail.equals(mail.getTestoEmail())){return true;}
+        else return false;
+    }
 }
