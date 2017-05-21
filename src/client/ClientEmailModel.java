@@ -97,7 +97,7 @@ public class ClientEmailModel extends Observable {
 	public void deleteClientMail(Email mail) throws RemoteException {
 	    mailList.removeElement(mail);
 	    server.deleteEmail(emailClient,mail);
-	    //forse setCanged() e notifyObservers() ????
+	    //forse setCanged() e notifyObservers() ? ???
     }
 
     /**
