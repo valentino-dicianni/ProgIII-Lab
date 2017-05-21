@@ -27,7 +27,7 @@ public class ClientEmailModel extends Observable {
         try {
             server = (ServerInterface) Naming.lookup("rmi://"+ipServer+":2000/server");
             System.out.println("Client connesso al server");
-            server.appendToLog("Client connesso");
+            server.appendToLog("Client " + nomeAcClient +" connesso");
 
 
         }

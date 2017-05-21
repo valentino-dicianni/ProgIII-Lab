@@ -120,6 +120,8 @@ public class ServerEmailModel extends Observable {
                 ArrayList<Email> emailList = new ArrayList<>();
                 emailList.add(mail);
                 serverMailList.put(mail.getDestEmail(), emailList);
+                appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
+
             }
         }
 
