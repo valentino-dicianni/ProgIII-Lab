@@ -1,5 +1,7 @@
 package client;
 
+import commonResources.Email;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

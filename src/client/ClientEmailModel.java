@@ -1,11 +1,12 @@
 package client;
 
-import server.LogInterface;
+import commonResources.Email;
+import commonResources.ServerInterface;
+
 import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Observable;
 
 
@@ -13,7 +14,7 @@ public class ClientEmailModel extends Observable {
 
     private String nomeAcClient, emailClient;
     private DefaultListModel mailList = new DefaultListModel();
-    private LogInterface server;
+    private ServerInterface server;
 	private String ipServer;
 	private RefreshMailThread refreshThread = new RefreshMailThread(this);
 
@@ -21,17 +22,17 @@ public class ClientEmailModel extends Observable {
 	public ClientEmailModel(String nomeAcClient, String emailClient) {
 		this.nomeAcClient = nomeAcClient;
 		this.emailClient = emailClient;
-        this.ipServer = JOptionPane.showInputDialog(null,"Inserire indirizzo IP locale del server","192.168.0.x");
+        this.ipServer = JOptionPane.showInputDialog(null,"Inserire indirizzo IP locale del server","localhost");
 
         try {
-            server = (LogInterface) Naming.lookup("rmi://"+ipServer+":2000/server");
+            server = (ServerInterface) Naming.lookup("rmi://"+ipServer+":2000/server");
             System.out.println("Client connesso al server");
             server.appendToLog("Client connesso");
 
 
         }
         catch(Exception e) {
-            System.out.println("Failed to find distributor" + e.getMessage());
+            System.out.println("Failed to find distributor " + e.getMessage());
         }
         //start refresh list thread
         new Thread(refreshThread).start();
@@ -45,7 +46,7 @@ public class ClientEmailModel extends Observable {
 		return emailClient;
 	}
 
-    public LogInterface getServer() {
+    public ServerInterface getServer() {
         return server;
     }
 
@@ -95,7 +96,7 @@ public class ClientEmailModel extends Observable {
      * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server
      */
     public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
-        server.inviaMail(new server.Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
+        server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
         System.out.println("Email inviata con successo al server...");
     }
 
@@ -135,20 +136,18 @@ class RefreshMailThread implements Runnable {
         System.out.println(Thread.currentThread().getName() + " di " + model.getEmailClient());
         while(true){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
 
                 DefaultListModel clientList = model.getMailList();
                 ArrayList serverList = model.getServer().getEmail(model.getEmailClient());
 
                 //ATTENZIONE: qui non funziona perchè Email di due classi diverse...non posso aggiungerlo
                 //TODO da modicficare, magari aggiungendo solo un intrerfaccia si risolve
-                /*
 
                 for (Object mergeList : serverList) {
                     clientList.addElement(mergeList);
-
-                }*/
-                System.out.println(serverList);
+                }
+				  System.out.println(serverList);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

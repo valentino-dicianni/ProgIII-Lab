@@ -1,4 +1,4 @@
-package client;
+package commonResources;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,6 +1,7 @@
 package server;
 
-import com.sun.org.apache.xml.internal.dtm.ref.EmptyIterator;
+import commonResources.Email;
+import commonResources.ServerInterface;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -13,10 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Observable;
 
-/**
- * Created by Daniele on 05/05/2017.
- */
-
 
 public class ServerEmailModel extends Observable {
     private Log log;
@@ -25,7 +22,7 @@ public class ServerEmailModel extends Observable {
 
 
     //classe Log
-    public class Log extends UnicastRemoteObject implements LogInterface{
+    public class Log extends UnicastRemoteObject implements ServerInterface {
         private String  nomeLog, testoLog;
         private Date dataCreazione;
         private int idLog;
