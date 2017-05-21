@@ -18,7 +18,6 @@ import java.util.Observable;
 public class ServerEmailModel extends Observable {
     private Log log;
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
-    private Email dummyMail = new Email("me", "te", "prova","ciao", 1 , null, false);
 
 
     //classe Log
@@ -110,6 +109,10 @@ public class ServerEmailModel extends Observable {
             notifyObservers(this);
         }
 
+        /**
+         * metodo che aggiunge alla lista delle mail di un utente la nuova mail inviata
+         * @syncronized per per evitare che che ci sia una lettura mentre avviene la scrittura
+         * nel caso in cui non esistelle la casella mail a cui aggiungerla: messaggio di errore*/
         @Override
         public synchronized void inviaMail(Email mail) {
             if(serverMailList.containsKey(mail.getDestEmail())){
@@ -126,21 +129,19 @@ public class ServerEmailModel extends Observable {
         }
 
         @Override
-        public void forwardMail(Email mail) throws RemoteException {
+        public synchronized void forwardMail(Email mail) throws RemoteException {
 
         }
 
         @Override
-        public ArrayList<Email> getEmail(String address){
+        public synchronized ArrayList<Email> getEmail(String address){
            return serverMailList.get(address);
-           /* ArrayList<Email> dmm = new ArrayList<>();
-            dmm.add(dummyMail);
-            dmm.add(dummyMail);
-            return dmm;*/
         }
-        @Override
-        public void deleteEmail(Email mail) throws RemoteException {
 
+        @Override
+        public synchronized void deleteEmail(String key,Email mail) throws RemoteException {
+            serverMailList.get(key).remove(mail);
+            appendToLog("Mail " + mail + " eliminata dall'account: " + key);
         }
     }//fine Class Log
 

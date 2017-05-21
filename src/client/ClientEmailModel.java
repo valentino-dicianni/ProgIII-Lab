@@ -93,6 +93,14 @@ public class ClientEmailModel extends Observable {
 	}
 
     /**
+     * metodo che elimina la mail selezionata dalla lista delle mail*/
+	public void deleteClientMail(Email mail) throws RemoteException {
+	    mailList.removeElement(mail);
+	    server.deleteEmail(emailClient,mail);
+	    //forse setCanged() e notifyObservers() ????
+    }
+
+    /**
      * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server
      */
     public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {

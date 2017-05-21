@@ -14,6 +14,6 @@ public interface ServerInterface extends Remote{
     void inviaMail(Email mail) throws RemoteException;
     void forwardMail(Email mail) throws RemoteException;
     ArrayList<Email> getEmail(String address) throws RemoteException;
-    void deleteEmail(Email mail) throws RemoteException;
+    void deleteEmail(String client, Email mail) throws RemoteException;
 
 }
