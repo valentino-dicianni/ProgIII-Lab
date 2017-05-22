@@ -81,7 +81,6 @@ public class ServerEmailModel extends Observable {
 
         public void appendToLog(String testoLog){
             setTestoLog(getTestoLog()+"\n"+newMessageLog(testoLog));
-            System.out.println("Metodo server eseguito in seguito a richiesta client, nuovo log: "+getTestoLog());
             setChanged();
             notifyObservers(this);
         }
@@ -152,11 +151,6 @@ public class ServerEmailModel extends Observable {
         }
 
         @Override
-        public synchronized void forwardMail(Email mail) throws RemoteException {
-
-        }
-
-        @Override
         public synchronized ArrayList<Email> getEmail(String address) throws RemoteException{
            return serverMailList.get(address);
         }
@@ -171,7 +165,7 @@ public class ServerEmailModel extends Observable {
         /**
          * funzione che sovrascrive il file email.csv con la lista aggiornata di email
          */
-        public void removeFromFile(){
+        public synchronized void removeFromFile(){
             BufferedWriter bw= null;
             try {
                 bw = new BufferedWriter (new FileWriter("src/server/email.csv"));

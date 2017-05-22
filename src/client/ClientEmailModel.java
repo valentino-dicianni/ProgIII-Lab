@@ -29,8 +29,6 @@ public class ClientEmailModel extends Observable {
             server = (ServerInterface) Naming.lookup("rmi://"+ipServer+":2000/server");
             System.out.println("Client connesso al server");
             server.appendToLog("Client " + nomeAcClient +" connesso");
-
-
         }
         catch(Exception e) {
             System.out.println("Failed to find distributor " + e.getMessage());
@@ -64,7 +62,6 @@ public class ClientEmailModel extends Observable {
 	/**
      *  metodo per set email come letta, notifica agli observers
      */
-
 	public void openEmail(Email selectedEmail) {
 		selectedEmail.setRead(true);
 		setChanged();
@@ -79,12 +76,10 @@ public class ClientEmailModel extends Observable {
 		notifyObservers("newEmailForm");
 	}
 
-
-	/**
+    /**
 	 * Metodo che inizializza la casella mail all'apertura
 	 * TODO aggiungere pull dal mail server delle ultime 15 mail
 	 */
-
 	public void showMail()  {
         ArrayList serverList = null;
         try {
@@ -99,6 +94,10 @@ public class ClientEmailModel extends Observable {
 		notifyObservers("updateMailList");
 	}
 
+    /**
+     * metodo che mostra il form del forward message corredato
+     * delle informazioni sul messaggio specifico da inviare
+     */
     public void showNewFrwdEmailForm(Email openedEmail) {
         ArrayList a = new ArrayList();
 
@@ -131,11 +130,7 @@ public class ClientEmailModel extends Observable {
      */
     public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
         try {
-            Date date = new Date();
-            //DateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy HH:mm");
-            //String formattedDate = dateFormat.format(date);
-            //date = dateFormat.parse(formattedDate);
-            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,date,false));
+            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,new Date(),false));
             if(!success){
                 System.out.println("inserire un indirizzo mail corretto");
                 JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
@@ -148,7 +143,6 @@ public class ClientEmailModel extends Observable {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Metodo che al momento della chiusura del client mail
@@ -175,7 +169,6 @@ public class ClientEmailModel extends Observable {
  *       - serverList possiede tutte le mail vecchie più quelle nuove
  * @post: dopo aver fatto il merge delle due liste, vengono aggiunte le mail mancanti nella lista di clientEmail.
  */
-
 class RefreshMailThread implements Runnable {
     private ClientEmailModel model;
 
