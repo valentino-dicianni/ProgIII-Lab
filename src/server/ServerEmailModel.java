@@ -115,15 +115,16 @@ public class ServerEmailModel extends Observable {
         @Override
         public synchronized boolean inviaMail(Email mail) throws RemoteException{
             if(serverMailList.containsKey(mail.getDestEmail())){
-                serverMailList.get(mail.getDestEmail()).add(mail);
+                serverMailList.get(mail.getDestEmail()).add(0,mail);
                 appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
                 Date dataSpedizioneEmail = mail.getDataSpedEmail();
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 String formattedDate = dateFormat.format(dataSpedizioneEmail);
 
+                BufferedWriter bw= null;
                 //scrittura su file
                 try {
-                    BufferedWriter bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
+                    bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
                     System.out.println(mail.getDataSpedEmail());
                     bw.write("\n"+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
                                 "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+formattedDate+
@@ -132,6 +133,13 @@ public class ServerEmailModel extends Observable {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                }finally {
+                    try {
+                        bw.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
                 return true;
 
@@ -140,6 +148,7 @@ public class ServerEmailModel extends Observable {
                 appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() +": Indirizzo mail non esistente" );
                 return false;
             }
+
         }
 
         @Override

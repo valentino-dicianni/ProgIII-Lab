@@ -4,3 +4,4 @@
 -Settare caret all'inizio della textarea del testo email se si fa forward
 -Fixare jlabel che allargano panel
 -Fixare formattazione testo email in modo che venga preservata
+-aggiungere la possibiltà di destinatari multipli
