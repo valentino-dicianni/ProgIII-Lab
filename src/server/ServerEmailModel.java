@@ -184,11 +184,11 @@ public class ServerEmailModel extends Observable {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 Date dataSped = format.parse(email[5]);
                 Email mail = new Email(email[0], email[1], email[2], email[3], prior, dataSped, read);
-                if (keyUser.equals(mail.getMittEmail()))
+                if (keyUser.equals(mail.getDestEmail()))
                     emailListUser.add(mail);
-               else if (keyUser2.equals(email[0]))
+               else if (keyUser2.equals(mail.getDestEmail()))
                     emailListUser2.add(mail);
-                else if (keyUser3.equals(email[0]))
+                else if (keyUser3.equals(mail.getDestEmail()))
                     emailListUser3.add(mail);
                else
                     System.out.print("Mail non appartenente ad un utente del nostro servizio");
