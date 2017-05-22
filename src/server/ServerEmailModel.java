@@ -2,17 +2,16 @@ package server;
 
 import commonResources.Email;
 import commonResources.ServerInterface;
-
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
+import java.io.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Observable;
 
 
 public class ServerEmailModel extends Observable {
@@ -156,9 +155,63 @@ public class ServerEmailModel extends Observable {
 
     /**
      * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
-     * TODO @Fra965 -> implementa lettura da file
+     * TODO @Fra95 -> implementa lettura da file
      */
-    public ServerEmailModel(){}
 
+   /* public ServerEmailModel() {
+
+    }
+*/
+    public ServerEmailModel(HashMap<String, ArrayList<Email>> serverMailList) {
+        this.serverMailList = serverMailList;
+         this.serverMailList = new HashMap<>();
+        String csvFile = "src/server/email.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+        ArrayList<Email> emailListUser = new ArrayList<>();
+        ArrayList<Email> emailListUser2 = new ArrayList<>();
+        ArrayList<Email> emailListUser3 = new ArrayList<>();
+        String keyUser = "user@gmail.com";
+        String keyUser2 = "user2@gmail.com";
+        String keyUser3 = "user3@gmail.com";
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                String[] email = line.split(cvsSplitBy);
+                boolean read = Boolean.parseBoolean(email[6]);
+                int prior = Integer.parseInt(email[4]);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                Date dataSped = format.parse(email[5]);
+                Email mail = new Email(email[0], email[1], email[2], email[3], prior, dataSped, read);
+                if (keyUser.equals(mail.getMittEmail()))
+                    emailListUser.add(mail);
+               else if (keyUser2.equals(email[0]))
+                    emailListUser2.add(mail);
+                else if (keyUser3.equals(email[0]))
+                    emailListUser3.add(mail);
+               else
+                    System.out.print("Mail non appartenente ad un utente del nostro servizio");
+            }
+            this.serverMailList.put(keyUser, emailListUser);
+            this.serverMailList.put(keyUser2, emailListUser2);
+            this.serverMailList.put(keyUser3, emailListUser3);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+    }
 
 }
