@@ -140,7 +140,10 @@ public class ClientEmailModel extends Observable {
                 System.out.println("inserire un indirizzo mail corretto");
                 JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
             }
-            else{System.out.println("Email inviata con successo al server...");}
+            else{
+                JOptionPane.showMessageDialog(null, "Complimenti: Email inviata con successo!", "COMPLIMENTI", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("Email inviata con successo al server...");
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
