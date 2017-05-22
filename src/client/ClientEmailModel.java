@@ -146,9 +146,17 @@ public class ClientEmailModel extends Observable {
 	}
 
 
+    public void showNewFrwdEmailForm(Email openedEmail) {
+        ArrayList a = new ArrayList();
 
+        a.add(openedEmail.getMittEmail());
+        a.add(openedEmail.getDestEmail());
+        a.add(openedEmail.getArgEmail());
+        a.add(openedEmail.getTestoEmail());
 
-
+        setChanged();
+        notifyObservers(a);
+    }
 }
 /**
  * Thread che in maniera periodica va a fare la pool dall mail box del server e ritorna eventuali

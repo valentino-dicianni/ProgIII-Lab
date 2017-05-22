@@ -16,6 +16,7 @@ import java.util.Date;
 
 public class ServerEmailModel extends Observable {
     private Log log;
+
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
 
 

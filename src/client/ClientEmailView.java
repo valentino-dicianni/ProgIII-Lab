@@ -8,16 +8,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.Caret;
 
 
 //Interfaccia della vista
 interface ClientEmailInterfaceView {
 	void updateEmailListGUI(Email c);
-	JPanel newEmailPanel();
+	JPanel newEmailPanel(ArrayList textEmail);
 	JPanel readEmailPanel();
 }
 
@@ -131,6 +133,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			newMailBtn.setName("newMailBtn");
 			newMailBtn.setToolTipText("<html>Nuova Email</html>");
 			interactiveTopPanel.add(newMailBtn, c);
+			newMailBtn.addActionListener(clientEmailCtrl);
 			if (showEmailRelatedOptions) {
 				JButton forwardBtn = new JButton();
 				forwardBtn.setToolTipText("Inoltra");
@@ -143,9 +146,11 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 				}
 				c.gridx = 1;
 				c.weightx = 0.5;
+				forwardBtn.addActionListener(clientEmailCtrl);
 				interactiveTopPanel.add(forwardBtn, c);
+				//forwardBtn.addActionListener(clientEmailCtrl);
 			}
-			newMailBtn.addActionListener(clientEmailCtrl);
+
 		}
 		else{
 			JButton sendMailButton = new JButton("");
@@ -220,7 +225,17 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			this.remove(interactiveTopPanel);
 			this.remove(interactiveRightPanel);
 			this.revalidate();
-			this.add(newEmailPanel(),c);
+			this.add(newEmailPanel(null),c);
+			this.add(TopRightPanel(true,true), topRightPanelConst);
+			this.repaint();
+		}
+		else if(arg1 instanceof ArrayList){
+			this.remove(interactiveTopPanel);
+			this.remove(interactiveRightPanel);
+			this.revalidate();
+			ArrayList frwdEmailData = ((ArrayList) arg1);
+			//String textEmail = frwdEmailData.get(1).toString();
+			this.add(newEmailPanel(frwdEmailData),c);
 			this.add(TopRightPanel(true,true), topRightPanelConst);
 			this.repaint();
 		}
@@ -268,12 +283,25 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	}
 
 	@Override
-	public JPanel newEmailPanel() {
+	public JPanel newEmailPanel(ArrayList frwdEmailData) {
 	//	add(TopRightPanel(false));
         interactiveRightPanel.removeAll();
-        subjectField.setText("");
-        toField.setText("");
-        contentTextArea.setText("");
+
+        if(frwdEmailData != null){
+			contentTextArea.setCaretPosition(0);
+        	contentTextArea.setText("\n\n----MESSAGGIO INOLTRATO---" +
+			"\nDA: <"+frwdEmailData.get(0).toString()+">"+
+			"\nA: <" +frwdEmailData.get(1).toString()+">"+
+			"\nOGGETTO: "+frwdEmailData.get(2)+
+			"\nCc: \n"+frwdEmailData.get(3)+
+			"\n ------------------------------");
+        	contentTextArea.moveCaretPosition(0);
+		}
+		else {
+			contentTextArea.setText("");
+		}
+		subjectField.setText("");
+		toField.setText("");
         interactiveRightPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -288,6 +316,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.gridy++;
 		headerPanel.add(new JLabel("Oggetto:"),c);
 		c.gridy++;
+
 		headerPanel.add(subjectField,c);
 		c.gridy++;
 
@@ -323,6 +352,10 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		JPanel headerPanel = new JPanel(new GridBagLayout());
+		fromLabel.setPreferredSize(new Dimension(1,1));
+		toLabel.setPreferredSize(new Dimension(1,1));
+		subjectField.setPreferredSize(new Dimension(1,1));
+		txtLabel.setPreferredSize(new Dimension(1,1));
 		headerPanel.add(new JLabel("DA: "+fromLabel.getText()),c);
 		c.gridy++;
 		headerPanel.add(new JLabel("A: "+toLabel.getText()),c);

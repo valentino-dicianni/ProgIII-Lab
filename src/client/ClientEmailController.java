@@ -14,6 +14,7 @@ import javax.swing.*;
 public class ClientEmailController implements ActionListener, MouseListener {
 	
 	private ClientEmailModel clientEmailMod;
+	private Email currentOpenedEmail;
 	
 	public ClientEmailController(ClientEmailModel clientEmailMod){
 		this.clientEmailMod = clientEmailMod;
@@ -25,7 +26,13 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		clientEmailMod.showNewEmailForm();
+		if((((JButton) e.getSource()).getName())=="frwdBtn"){
+			clientEmailMod.showNewFrwdEmailForm(currentOpenedEmail);
+		}
+		else if((((JButton) e.getSource()).getName())=="newMailBtn"){
+			//if(e.getActionCommand()==)
+			clientEmailMod.showNewEmailForm();
+		}
 	}
 
 	@Override
@@ -37,6 +44,7 @@ public class ClientEmailController implements ActionListener, MouseListener {
         	theList.setToolTipText(null);
             Email selectedEmail = (Email) model.getElementAt(index);
             clientEmailMod.openEmail(selectedEmail);
+            currentOpenedEmail = selectedEmail;
         }		
 	}
 
