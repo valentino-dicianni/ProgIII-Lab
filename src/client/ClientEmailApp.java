@@ -58,7 +58,7 @@ public class ClientEmailApp extends JFrame {
         setTitle("Email di " + nickname);
 
         pack();
-        setSize(1000, 700);
+       	setSize(1024, 768);
         setVisible(true);
 	}
 

@@ -60,7 +60,7 @@ public class ClientEmailModel extends Observable {
 	}
 
 	/**
-     *  metodo per set email come letta, notifica agli observers
+     *  metodo set dell'email come letta, notifica apertura email agli observers
      */
 	public void openEmail(Email selectedEmail) {
 		selectedEmail.setRead(true);
@@ -95,12 +95,14 @@ public class ClientEmailModel extends Observable {
 	}
 
     /**
-     * metodo che mostra il form del forward message corredato
-     * delle informazioni sul messaggio specifico da inviare
+     * Metodo che preleva informazioni riguardanti la email da inoltrare o a cui
+     * rispondere
+     * TODO aggiungere pull dal mail server delle ultime 15 mail
      */
-    public void showNewFrwdEmailForm(Email openedEmail) {
+    public void getSelectedEmailData(Email openedEmail, String action) {
         ArrayList a = new ArrayList();
 
+        a.add(action);
         a.add(openedEmail.getMittEmail());
         a.add(openedEmail.getDestEmail());
         a.add(openedEmail.getArgEmail());
@@ -128,20 +130,21 @@ public class ClientEmailModel extends Observable {
      * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server. In caso di errore avvisa l'utente
      * tramite finestra di dialog!
      */
-    public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
+    public boolean sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
         try {
-            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,new Date(),false));
+            Date date = new Date();
+            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,date,false));
             if(!success){
-                System.out.println("inserire un indirizzo mail corretto");
-                JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
+                return false;
             }
             else{
-                JOptionPane.showMessageDialog(null, "Complimenti: Email inviata con successo!", "COMPLIMENTI", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("Email inviata con successo al server...");
             }
         } catch (RemoteException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     /**

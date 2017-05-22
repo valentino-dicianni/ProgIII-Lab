@@ -27,7 +27,7 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if((((JButton) e.getSource()).getName())=="frwdBtn"){
-			clientEmailMod.showNewFrwdEmailForm(currentOpenedEmail);
+			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"frwd");
 		}
 		else if((((JButton) e.getSource()).getName())=="newMailBtn"){
 			clientEmailMod.showNewEmailForm();
@@ -35,6 +35,10 @@ public class ClientEmailController implements ActionListener, MouseListener {
 		else if((((JButton) e.getSource()).getName())=="delEmailBtn"){
 			clientEmailMod.deleteMail(currentOpenedEmail);
 		}
+		else if((((JButton) e.getSource()).getName())=="replyEmailBtn"){
+			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"reply");
+		}
+
 	}
 
 	@Override
@@ -69,7 +73,13 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	    clientEmailMod.showMail();
     }
 
-	public void newEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
-		clientEmailMod.sendEmail(toFieldText,subjectFieldText,contentFieldText);
+	public boolean newEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
+		if(clientEmailMod.sendEmail(toFieldText,subjectFieldText,contentFieldText)){
+			return true;
+		}
+		else{
+			return false;
+		}
+
 	}
 }
