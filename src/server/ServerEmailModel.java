@@ -117,12 +117,24 @@ public class ServerEmailModel extends Observable {
             if(serverMailList.containsKey(mail.getDestEmail())){
                 serverMailList.get(mail.getDestEmail()).add(mail);
                 appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
+
+                //scrittura su file
+                try {
+                    BufferedWriter bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
+                    bw.write("\n"+mail.getMittEmail()+"|"+mail.getDestEmail()+"|"+mail.getArgEmail()+
+                                "|"+mail.getTestoEmail()+"|"+ mail.getPriorEmail()+"|"+mail.getDataSpedEmail()+
+                                "|false");
+                    bw.flush();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return true;
-            }
+
+            }//se la scrittura non è andata a buon fine
             else{
                 appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() +": Indirizzo mail non esistente" );
                 return false;
-
             }
         }
 

@@ -87,8 +87,5 @@ public class Email implements Serializable {
         else return false;
     }
 
-    @Override
-    public String toString() {
-        return "Mail from: " + this.mittEmail + this + " to: " + this.destEmail + " obj: " + this.argEmail;
-    }
+
 }

@@ -107,8 +107,9 @@ public class ClientEmailModel extends Observable {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        //forse setCanged() e notifyObservers() ? ???
-    }
+        setChanged();
+        notifyObservers("updateMailList");
+	}
 
     /**
      * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server. In caso di errore avvisa l'utente
@@ -125,8 +126,6 @@ public class ClientEmailModel extends Observable {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
-
     }
 
 
@@ -174,7 +173,7 @@ class RefreshMailThread implements Runnable {
                 DefaultListModel clientList = model.getMailList();
                 Object[] arr=clientList.toArray();
 
-                if(serverList != null){//da controllare se funziona(in teoria si una volta che prende la vera lista mail)
+                if(serverList != null){
                     for (int j = arr.length-1; j >= 0; j--) {
                         serverList.remove(arr[j]);
                     }
