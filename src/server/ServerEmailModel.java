@@ -126,9 +126,9 @@ public class ServerEmailModel extends Observable {
                 try {
                     bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
                     System.out.println(mail.getDataSpedEmail());
-                    bw.write("\n"+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
+                    bw.write(mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
                                 "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+formattedDate+
-                                "#false");
+                                "#false\n");
                     bw.flush();
 
                 } catch (IOException e) {
@@ -164,7 +164,38 @@ public class ServerEmailModel extends Observable {
         @Override
         public synchronized void deleteEmail(String key,Email mail) throws RemoteException {
             serverMailList.get(key).remove(mail);
+            removeFromFile();
             appendToLog("Mail " + mail + " eliminata dall'account: " + key);
+        }
+
+        /**
+         * funzione che sovrascrive il file email.csv con la lista aggiornata di email
+         */
+        public void removeFromFile(){
+            BufferedWriter bw= null;
+            try {
+                bw = new BufferedWriter (new FileWriter("src/server/email.csv"));
+                for (String key: serverMailList.keySet()) {
+                    ArrayList<Email> list = (ArrayList<Email>) (serverMailList.get(key)).clone();
+                    Collections.reverse(list);
+                    for(Email mail:list){
+                        Date dataSpedizioneEmail = mail.getDataSpedEmail();
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        String formattedDate = dateFormat.format(dataSpedizioneEmail);
+
+                        bw.write(""+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
+                                "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+formattedDate+
+                                "#"+mail.isRead()+"\n");
+                        bw.flush();
+
+                    }
+                }
+                bw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }//fine Class Log
 

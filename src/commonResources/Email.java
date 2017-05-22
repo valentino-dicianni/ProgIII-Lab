@@ -87,5 +87,8 @@ public class Email implements Serializable {
         else return false;
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
