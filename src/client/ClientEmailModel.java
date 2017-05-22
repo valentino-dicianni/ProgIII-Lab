@@ -84,9 +84,15 @@ public class ClientEmailModel extends Observable {
 	 * TODO aggiungere pull dal mail server delle ultime 15 mail
 	 */
 
-	public void showMail(){
-		for (int i = 0; i < 15; i++) {
-			mailList.addElement(new Email("Mittente "+i, "Destinatario "+i, "Oggetto "+i, "Testo email"+i, 1, null,false));
+	public void showMail()  {
+        ArrayList serverList = null;
+        try {
+            serverList = server.getEmail(emailClient);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        for (Object mail : serverList) {
+			mailList.addElement((Email)mail);
 		}
 		setChanged();
 		notifyObservers("updateMailList");
@@ -94,10 +100,14 @@ public class ClientEmailModel extends Observable {
 
     /**
      * metodo che elimina la mail selezionata dalla lista delle mail*/
-	public void deleteClientMail(Email mail) throws RemoteException {
+	public void deleteClientMail(Email mail) {
 	    mailList.removeElement(mail);
-	    server.deleteEmail(emailClient,mail);
-	    //forse setCanged() e notifyObservers() ? ???
+        try {
+            server.deleteEmail(emailClient,mail);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        //forse setCanged() e notifyObservers() ? ???
     }
 
     /**

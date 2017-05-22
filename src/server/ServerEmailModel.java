@@ -155,16 +155,11 @@ public class ServerEmailModel extends Observable {
 
     /**
      * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
-     * TODO @Fra95 -> implementa lettura da file
      */
 
-   /* public ServerEmailModel() {
-
-    }
-*/
     public ServerEmailModel(HashMap<String, ArrayList<Email>> serverMailList) {
         this.serverMailList = serverMailList;
-         this.serverMailList = new HashMap<>();
+        this.serverMailList = new HashMap<>();
         String csvFile = "src/server/email.csv";
         BufferedReader br = null;
         String line = "";

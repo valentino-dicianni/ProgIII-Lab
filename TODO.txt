@@ -1,0 +1,1 @@
+quando viene aperta una mail settare a true il valore di lettura anche nel file csv, così quando si apre la casella non abbiamo sempre le mail da leggere
