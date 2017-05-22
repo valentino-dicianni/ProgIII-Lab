@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 
 
@@ -98,8 +99,21 @@ public class ClientEmailModel extends Observable {
 		notifyObservers("updateMailList");
 	}
 
+    public void showNewFrwdEmailForm(Email openedEmail) {
+        ArrayList a = new ArrayList();
+
+        a.add(openedEmail.getMittEmail());
+        a.add(openedEmail.getDestEmail());
+        a.add(openedEmail.getArgEmail());
+        a.add(openedEmail.getTestoEmail());
+
+        setChanged();
+        notifyObservers(a);
+    }
+
     /**
-     * metodo che elimina la mail selezionata dalla lista delle mail*/
+     * metodo che elimina la mail selezionata dalla lista delle mail
+     */
 	public void deleteMail(Email mail) {
 	    mailList.removeElement(mail);
         try {
@@ -145,19 +159,7 @@ public class ClientEmailModel extends Observable {
 		}
 	}
 
-    /**
-     * metodo che prende i dati della email da inoltrare e li spedisce alla vista*/
-    public void showNewFrwdEmailForm(Email openedEmail) {
-        ArrayList a = new ArrayList();
 
-        a.add(openedEmail.getMittEmail());
-        a.add(openedEmail.getDestEmail());
-        a.add(openedEmail.getArgEmail());
-        a.add(openedEmail.getTestoEmail());
-
-        setChanged();
-        notifyObservers(a);
-    }
 }
 /**
  * Thread che in maniera periodica va a fare la pool dall mail box del server e ritorna eventuali
@@ -189,6 +191,9 @@ class RefreshMailThread implements Runnable {
 
                     for (Object mergeElem : serverList) {
                         clientList.add(0,mergeElem);
+                    }
+                    if(serverList.size()>0){
+                        model.getServer().appendToLog("Ci sono nuove mail disponibili nella casella del client: " + model.getNomeAcClient());
                     }
                 }
 
