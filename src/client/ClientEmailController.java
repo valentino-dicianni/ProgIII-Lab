@@ -30,8 +30,10 @@ public class ClientEmailController implements ActionListener, MouseListener {
 			clientEmailMod.showNewFrwdEmailForm(currentOpenedEmail);
 		}
 		else if((((JButton) e.getSource()).getName())=="newMailBtn"){
-			//if(e.getActionCommand()==)
 			clientEmailMod.showNewEmailForm();
+		}
+		else if((((JButton) e.getSource()).getName())=="delEmailBtn"){
+			clientEmailMod.deleteMail(currentOpenedEmail);
 		}
 	}
 

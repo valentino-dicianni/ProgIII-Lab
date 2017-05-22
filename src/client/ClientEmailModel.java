@@ -100,7 +100,7 @@ public class ClientEmailModel extends Observable {
 
     /**
      * metodo che elimina la mail selezionata dalla lista delle mail*/
-	public void deleteClientMail(Email mail) {
+	public void deleteMail(Email mail) {
 	    mailList.removeElement(mail);
         try {
             server.deleteEmail(emailClient,mail);
@@ -145,7 +145,8 @@ public class ClientEmailModel extends Observable {
 		}
 	}
 
-
+    /**
+     * metodo che prende i dati della email da inoltrare e li spedisce alla vista*/
     public void showNewFrwdEmailForm(Email openedEmail) {
         ArrayList a = new ArrayList();
 

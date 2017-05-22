@@ -135,6 +135,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			interactiveTopPanel.add(newMailBtn, c);
 			newMailBtn.addActionListener(clientEmailCtrl);
 			if (showEmailRelatedOptions) {
+
+			    //PULSANTE FORWARD EMAIL
 				JButton forwardBtn = new JButton();
 				forwardBtn.setToolTipText("Inoltra");
 				forwardBtn.setName("frwdBtn");
@@ -148,7 +150,21 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 				c.weightx = 0.5;
 				forwardBtn.addActionListener(clientEmailCtrl);
 				interactiveTopPanel.add(forwardBtn, c);
-				//forwardBtn.addActionListener(clientEmailCtrl);
+
+                //PULSANTE ELIMINAZIONE MAIL
+                JButton deleteBtn = new JButton();
+                deleteBtn.setToolTipText("Elimina mail");
+                deleteBtn.setName("delEmailBtn");
+                try {
+                    img = ImageIO.read(getClass().getResource("/delEmailBtn.png"));
+                    deleteBtn.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+                c.gridx = 2;
+                c.weightx = 0.1;
+                deleteBtn.addActionListener(clientEmailCtrl);
+                interactiveTopPanel.add(deleteBtn, c);
 			}
 
 		}
@@ -284,18 +300,16 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	@Override
 	public JPanel newEmailPanel(ArrayList frwdEmailData) {
-	//	add(TopRightPanel(false));
         interactiveRightPanel.removeAll();
-
         if(frwdEmailData != null){
-			contentTextArea.setCaretPosition(0);
         	contentTextArea.setText("\n\n----MESSAGGIO INOLTRATO---" +
-			"\nDA: <"+frwdEmailData.get(0).toString()+">"+
+			"\n\nDA: <"+frwdEmailData.get(0).toString()+">"+
 			"\nA: <" +frwdEmailData.get(1).toString()+">"+
 			"\nOGGETTO: "+frwdEmailData.get(2)+
 			"\nCc: \n"+frwdEmailData.get(3)+
-			"\n ------------------------------");
-        	contentTextArea.moveCaretPosition(0);
+			"\n\n ------------------------------");
+            contentTextArea.getCaret().setVisible(true);
+            contentTextArea.setCaretPosition(0);
 		}
 		else {
 			contentTextArea.setText("");
@@ -316,7 +330,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.gridy++;
 		headerPanel.add(new JLabel("Oggetto:"),c);
 		c.gridy++;
-
 		headerPanel.add(subjectField,c);
 		c.gridy++;
 
@@ -354,7 +367,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		JPanel headerPanel = new JPanel(new GridBagLayout());
 		fromLabel.setPreferredSize(new Dimension(1,1));
 		toLabel.setPreferredSize(new Dimension(1,1));
-		subjectField.setPreferredSize(new Dimension(1,1));
+		subjectLabel.setPreferredSize(new Dimension(1,1));
 		txtLabel.setPreferredSize(new Dimension(1,1));
 		headerPanel.add(new JLabel("DA: "+fromLabel.getText()),c);
 		c.gridy++;
