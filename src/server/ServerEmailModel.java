@@ -194,11 +194,11 @@ public class ServerEmailModel extends Observable {
                 Date dataSped = format.parse(email[5]);
                 Email mail = new Email(email[0], email[1], email[2], email[3], prior, dataSped, read);
                 if (keyUser.equals(mail.getDestEmail()))
-                    emailListUser.add(mail);
+                    emailListUser.add(0,mail);
                 else if (keyUser2.equals(mail.getDestEmail()))
-                    emailListUser2.add(mail);
+                    emailListUser2.add(0,mail);
                 else if (keyUser3.equals(mail.getDestEmail()))
-                    emailListUser3.add(mail);
+                    emailListUser3.add(0,mail);
                else
                     System.out.print("Mail non appartenente ad un utente del nostro servizio");
             }
