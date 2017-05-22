@@ -117,12 +117,16 @@ public class ServerEmailModel extends Observable {
             if(serverMailList.containsKey(mail.getDestEmail())){
                 serverMailList.get(mail.getDestEmail()).add(mail);
                 appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
+                Date dataSpedizioneEmail = mail.getDataSpedEmail();
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                String formattedDate = dateFormat.format(dataSpedizioneEmail);
 
                 //scrittura su file
                 try {
                     BufferedWriter bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
+                    System.out.println(mail.getDataSpedEmail());
                     bw.write("\n"+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
-                                "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+mail.getDataSpedEmail()+
+                                "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+formattedDate+
                                 "#false");
                     bw.flush();
 
@@ -186,7 +190,7 @@ public class ServerEmailModel extends Observable {
                 String[] email = line.split(cvsSplitBy);
                 boolean read = Boolean.parseBoolean(email[6]);
                 int prior = Integer.parseInt(email[4]);
-                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date dataSped = format.parse(email[5]);
                 Email mail = new Email(email[0], email[1], email[2], email[3], prior, dataSped, read);
                 if (keyUser.equals(mail.getDestEmail()))

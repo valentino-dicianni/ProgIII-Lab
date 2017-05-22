@@ -6,6 +6,9 @@ import commonResources.ServerInterface;
 import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
@@ -131,7 +134,11 @@ public class ClientEmailModel extends Observable {
      */
     public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
         try {
-            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
+            Date date = new Date();
+            //DateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy HH:mm");
+            //String formattedDate = dateFormat.format(date);
+            //date = dateFormat.parse(formattedDate);
+            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,date,false));
             if(!success){
                 System.out.println("inserire un indirizzo mail corretto");
                 JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
