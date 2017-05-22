@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /* Interfaccia che estende Remote per funzionamento RMI*/
 public interface ServerInterface extends Remote{
     void appendToLog(String testoLog) throws RemoteException;
-    void inviaMail(Email mail) throws RemoteException;
+    boolean inviaMail(Email mail) throws RemoteException;
     void forwardMail(Email mail) throws RemoteException;
     ArrayList<Email> getEmail(String address) throws RemoteException;
     void deleteEmail(String client, Email mail) throws RemoteException;

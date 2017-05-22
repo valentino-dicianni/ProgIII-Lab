@@ -111,11 +111,22 @@ public class ClientEmailModel extends Observable {
     }
 
     /**
-     * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server
+     * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server. In caso di errore avvisa l'utente
+     * tramite finestra di dialog!
      */
-    public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
-        server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
-        System.out.println("Email inviata con successo al server...");
+    public void sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
+        try {
+            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,null,false));
+            if(!success){
+                System.out.println("inserire un indirizzo mail corretto");
+                JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
+            }
+            else{System.out.println("Email inviata con successo al server...");}
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 

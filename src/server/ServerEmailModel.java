@@ -113,16 +113,15 @@ public class ServerEmailModel extends Observable {
          * @syncronized per per evitare che che ci sia una lettura mentre avviene la scrittura
          * nel caso in cui non esistelle la casella mail a cui aggiungerla: messaggio di errore*/
         @Override
-        public synchronized void inviaMail(Email mail) {
+        public synchronized boolean inviaMail(Email mail) throws RemoteException{
             if(serverMailList.containsKey(mail.getDestEmail())){
                 serverMailList.get(mail.getDestEmail()).add(mail);
                 appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
+                return true;
             }
             else{
-                ArrayList<Email> emailList = new ArrayList<>();
-                emailList.add(mail);
-                serverMailList.put(mail.getDestEmail(), emailList);
-                appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
+                appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() +": Indirizzo mail non esistente" );
+                return false;
 
             }
         }
@@ -133,7 +132,7 @@ public class ServerEmailModel extends Observable {
         }
 
         @Override
-        public synchronized ArrayList<Email> getEmail(String address){
+        public synchronized ArrayList<Email> getEmail(String address) throws RemoteException{
            return serverMailList.get(address);
         }
 
