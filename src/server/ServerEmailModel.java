@@ -16,7 +16,6 @@ import java.util.Date;
 
 public class ServerEmailModel extends Observable {
     private Log log;
-
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
 
 
@@ -122,9 +121,9 @@ public class ServerEmailModel extends Observable {
                 //scrittura su file
                 try {
                     BufferedWriter bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
-                    bw.write("\n"+mail.getMittEmail()+"|"+mail.getDestEmail()+"|"+mail.getArgEmail()+
-                                "|"+mail.getTestoEmail()+"|"+ mail.getPriorEmail()+"|"+mail.getDataSpedEmail()+
-                                "|false");
+                    bw.write("\n"+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
+                                "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+mail.getDataSpedEmail()+
+                                "#false");
                     bw.flush();
 
                 } catch (IOException e) {
@@ -169,13 +168,12 @@ public class ServerEmailModel extends Observable {
      * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
      */
 
-    public ServerEmailModel(HashMap<String, ArrayList<Email>> serverMailList) {
-        this.serverMailList = serverMailList;
+    public ServerEmailModel() {
         this.serverMailList = new HashMap<>();
         String csvFile = "src/server/email.csv";
         BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ",";
+        String cvsSplitBy = "#";
         ArrayList<Email> emailListUser = new ArrayList<>();
         ArrayList<Email> emailListUser2 = new ArrayList<>();
         ArrayList<Email> emailListUser3 = new ArrayList<>();
@@ -188,12 +186,12 @@ public class ServerEmailModel extends Observable {
                 String[] email = line.split(cvsSplitBy);
                 boolean read = Boolean.parseBoolean(email[6]);
                 int prior = Integer.parseInt(email[4]);
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 Date dataSped = format.parse(email[5]);
                 Email mail = new Email(email[0], email[1], email[2], email[3], prior, dataSped, read);
                 if (keyUser.equals(mail.getDestEmail()))
                     emailListUser.add(mail);
-               else if (keyUser2.equals(mail.getDestEmail()))
+                else if (keyUser2.equals(mail.getDestEmail()))
                     emailListUser2.add(mail);
                 else if (keyUser3.equals(mail.getDestEmail()))
                     emailListUser3.add(mail);
@@ -203,6 +201,7 @@ public class ServerEmailModel extends Observable {
             this.serverMailList.put(keyUser, emailListUser);
             this.serverMailList.put(keyUser2, emailListUser2);
             this.serverMailList.put(keyUser3, emailListUser3);
+
 
         } catch (IOException e) {
             e.printStackTrace();

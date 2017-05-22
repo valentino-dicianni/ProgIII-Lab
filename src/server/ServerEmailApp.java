@@ -10,10 +10,9 @@ import java.util.HashMap;
  * Created by Daniele on 05/05/2017.
  */
 public class ServerEmailApp extends JFrame {
-    private HashMap<String, ArrayList<Email>> serverMailList;
     public ServerEmailApp(){
         // Modello
-        ServerEmailModel serverEmailMod = new ServerEmailModel(serverMailList);
+        ServerEmailModel serverEmailMod = new ServerEmailModel();
        // ServerEmailModel serverEmailMod = new ServerEmailModel();
         //serverEmailMod.setServerMailList();
 
