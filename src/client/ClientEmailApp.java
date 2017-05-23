@@ -67,7 +67,7 @@ public class ClientEmailApp extends JFrame {
 
 	private static void initLookAndFeel() {
 		String lookAndFeel = null;
-		final String LOOKANDFEEL = "System";
+		final String LOOKANDFEEL = "Metal";
 		final String THEME = "DefaultMetal";
 
 		if (LOOKANDFEEL != null) {
@@ -117,7 +117,7 @@ public class ClientEmailApp extends JFrame {
 
 	public static void main(String[] args) {
 		// TODO creare un input panel per chiedere nickname e emailAddress per poterlo personalizzare
-		ClientEmailApp client = new ClientEmailApp("John", "user@gmail.com");
+		ClientEmailApp client = new ClientEmailApp("Franz1", "user2@gmail.com");
 	}
 
 }
