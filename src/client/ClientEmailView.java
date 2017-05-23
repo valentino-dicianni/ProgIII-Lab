@@ -15,12 +15,14 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.TitledBorder;
 
 
 //Interfaccia della vista
 interface ClientEmailInterfaceView {
-	void updateClientGUI(Email c);
-	JPanel newEmailPanel(ArrayList textEmail);
+	void updateClientGUI(Email selectedEmail);
+	JPanel newEmailPanel(ArrayList optEmailData);
 	JPanel readEmailPanel();
 }
 
@@ -98,11 +100,14 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	private JPanel TopLeftPanel(){
 		JPanel topLeftPanel = new JPanel(new GridBagLayout());
+		topLeftPanel.setBackground(Color.decode("#5460ce"));
 		GridBagConstraints c = new GridBagConstraints();
-		JLabel headerLabel = new JLabel("Posta in arrivo");
+		JLabel headerLabel = new JLabel("<html><i><b>Posta di "+clientEmailCtrl.getClientName()+"<b></i></html>");
+		headerLabel.setFont(new Font("Helvetica", Font.PLAIN, 15));
+		headerLabel.setForeground(Color.WHITE);
 		c.gridx = 1;
 		c.gridy = 0;
-		c.weightx = 1;
+		c.weightx = 0;
         c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
 		topLeftPanel.add(headerLabel,c);
@@ -114,6 +119,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	private JPanel TopRightPanel(boolean readEmailView,boolean sendEmailView) {
 		interactiveTopPanel = new JPanel(new GridBagLayout());
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -215,10 +221,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
         c.fill=GridBagConstraints.BOTH;
         JScrollPane scrollPane = new JScrollPane(clientEmailList);
         scrollPane.setMinimumSize(new Dimension(400,1));
-        //scrollPane.setLayout(new GridBagLayout());
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		defaultLeftPanel.add(scrollPane,c);
-		//defaultLeftPanel.setPreferredSize(new Dimension(600,1));
 		return defaultLeftPanel;
 	}
 
@@ -226,14 +230,15 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	 * Metodo per visualizzazione pannello default destro */
 	private JPanel defaultRightPanel() {
 		interactiveRightPanel = new JPanel(new GridBagLayout());
-		//interactiveRightPanel.setBackground(Color.BLUE);
+		interactiveRightPanel.setBackground(Color.WHITE);
 		GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 0;
         c.weighty = 0;
-		JLabel label = new JLabel("Bentornato");
-		interactiveRightPanel.add(label,c);
+		JLabel welcomeLabel = new JLabel("<html><b>Bentornato, "+clientEmailCtrl.getClientName()+". <br>Hai ricevuto n mail dal tuo ultimo accesso.</b></html>");
+		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 15));
+		interactiveRightPanel.add(welcomeLabel,c);
 		interactiveRightPanel.revalidate();
 		return interactiveRightPanel;
 	}
@@ -283,7 +288,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
           	clientEmailList.setFixedCellHeight(75);
 			clientEmailList.setCellRenderer(new MyListCellRenderer());
 			clientEmailList.setFixedCellWidth(400);
-
+			clientEmailList.setBackground(Color.decode("#f9f9f7"));
             //Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
             clientEmailList.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
@@ -305,20 +310,34 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	 * Metodo avente compito di aggiornamento lista e variabili in seguito ad apertura email dalla lista*/
 	@Override
 	public void updateClientGUI(Email selectedEmail) {
+
 		clientEmailList.setCellRenderer(new MyListCellRenderer());
-		receivedEmailSender.setText("DA: "+selectedEmail.getMittEmail());
-		receivedEmailDest.setText("A: "+selectedEmail.getDestEmail());
-		receivedEmailSubject.setText("OGGETTO: "+selectedEmail.getArgEmail());
+		receivedEmailSender.setText("<html><b>DA: </b>"+selectedEmail.getMittEmail()+"</html>");
+		receivedEmailSender.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		receivedEmailDest.setText("<html><b>A:</b> "+selectedEmail.getDestEmail()+"</html>");
+		receivedEmailDest.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		receivedEmailSubject.setText("<html><b>OGGETTO:</b> "+selectedEmail.getArgEmail()+"</html>");
+		receivedEmailSubject.setFont(new Font("Helvetica", Font.PLAIN, 13));
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String dataSped = format.format(selectedEmail.getDataSpedEmail());
-		receivedEmailDate.setText("DATA INVIO: "+dataSped);
+		receivedEmailDate.setText("<html><b>DATA INVIO:</b> "+dataSped+"</html>");
+		receivedEmailDate.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		receivedEmailText.setText(selectedEmail.getTestoEmail());
+		receivedEmailText.setFont(new Font("Helvetica", Font.PLAIN, 14));
 	}
 
 	/**
 	 * Metodo avente compito di visualizzazione pannello di creazione email*/
 	@Override
 	public JPanel newEmailPanel(ArrayList optEmailData) {
+		JLabel labelTo = new JLabel();
+		JLabel labelSubj = new JLabel();
+		labelTo.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		labelSubj.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		newEmailSubject.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		newMailDest.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		newEmailText.setFont(new Font("Helvetica", Font.PLAIN, 14));
+		newEmailText.setRows(30);
         interactiveRightPanel.removeAll();
         if(optEmailData != null && optEmailData.get(0).toString() =="frwd"){
         	newEmailText.setText("\n\n--------MESSAGGIO INOLTRATO--------" +
@@ -354,11 +373,14 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.fill = GridBagConstraints.HORIZONTAL;
 
 		JPanel headerPanel = new JPanel(new GridBagLayout());
-		headerPanel.add(new JLabel("A:"),c);
+
+		labelTo.setText("A:");
+		headerPanel.add(labelTo,c);
 		c.gridy++;
 		headerPanel.add(newMailDest,c);
 		c.gridy++;
-		headerPanel.add(new JLabel("Oggetto:"),c);
+		labelSubj.setText("Oggetto:");
+		headerPanel.add(labelSubj,c);
 		c.gridy++;
 		headerPanel.add(newEmailSubject,c);
 		c.gridy++;
@@ -368,16 +390,22 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		newEmailText.setLineWrap(true);
 		newEmailText.setWrapStyleWord(true);
 		c.fill = GridBagConstraints.BOTH;
-		bodyPanel.add(newEmailText,c);
+		JScrollPane newMailTextScrollPane = new JScrollPane(newEmailText);
+		newMailTextScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		bodyPanel.add(newMailTextScrollPane ,c);
 		c.weighty = 0;
 		c.gridy=0;
 
-		headerPanel.setBorder(BorderFactory.createTitledBorder("Invia Nuova Mail"));
+		TitledBorder titledBorderData = BorderFactory.createTitledBorder("Invia Nuova Email");
+		titledBorderData.setTitleColor(Color.decode("#5460ce"));
+		headerPanel.setBorder(titledBorderData);
 		c.insets = new Insets(5,5,5,5);
 		interactiveRightPanel.add(headerPanel,c);
 		c.gridy=1;
 		c.weighty = 1;
-		bodyPanel.setBorder(BorderFactory.createTitledBorder("Messaggio"));
+		TitledBorder titledBorderText = BorderFactory.createTitledBorder("Messaggio");
+		titledBorderText.setTitleColor(Color.decode("#5460ce"));
+		bodyPanel.setBorder(titledBorderText);
 		interactiveRightPanel.add(bodyPanel,c);
 
 		interactiveRightPanel.revalidate();
@@ -396,8 +424,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		JPanel headerPanel = new JPanel(new GridBagLayout());
-		receivedEmailText.setPreferredSize(new Dimension(1,1));
 		receivedEmailText.setColumns(1);
+		receivedEmailText.setRows(30);
 		receivedEmailText.setEditable(false);
         receivedEmailText.setLineWrap(true);
         receivedEmailText.setWrapStyleWord(true);
@@ -415,22 +443,31 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		JPanel bodyPanel = new JPanel(new GridBagLayout());
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		bodyPanel.add(receivedEmailText,c);
+		receivedEmailText.setCaretPosition(0);
+		receivedEmailText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		JScrollPane newMailTextScrollPane = new JScrollPane(receivedEmailText);
+		newMailTextScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		bodyPanel.add(newMailTextScrollPane ,c);
 		c.weighty = 0;
 		c.gridy=0;
 
-		headerPanel.setBorder(BorderFactory.createTitledBorder("Dati"));
+		TitledBorder titledBorderData = BorderFactory.createTitledBorder("Dati");
+		titledBorderData.setTitleColor(Color.decode("#5460ce"));
+		headerPanel.setBorder(titledBorderData);
 		c.insets = new Insets(5,5,5,5);
 		interactiveRightPanel.add(headerPanel,c);
 		c.gridy=1;
 		c.weighty = 1;
-		bodyPanel.setBorder(BorderFactory.createTitledBorder("Testo messaggio"));
+		TitledBorder titledBorderText = BorderFactory.createTitledBorder("Testo messaggio");
+		titledBorderText.setTitleColor(Color.decode("#5460ce"));
+		bodyPanel.setBorder(titledBorderText);
 		interactiveRightPanel.add(bodyPanel,c);
 
 		JPanel footerPanel = new JPanel(new GridBagLayout());
 		c.gridy=2;
 		c.weighty = 0;
 		JButton replyBtn = new JButton("Rispondi alla email"); //TODO Il replyAll da implementare cin seguito ome dialog di scelta.
+		replyBtn.setFont(new Font("Helvetica", Font.BOLD, 13));
 		replyBtn.setName("replyEmailBtn");
 		replyBtn.addActionListener(clientEmailCtrl);
 		footerPanel.add(replyBtn);
@@ -456,12 +493,11 @@ class MyListCellRenderer extends JLabel implements ListCellRenderer<Email> {
 			int index, boolean isSelected, boolean cellHasFocus) {
 		
 		Email label = value;
+		setFont(new Font("Helvetica", Font.PLAIN, 14));
 		String mitt = label.getMittEmail();
 		String arg = label.getArgEmail();
-		//String testo = label.getTestoEmail();
 		boolean isRead = label.isRead();
-	//	int prior = label.getPriorEmail();
-		String labelText = "<html>Mittente: " + mitt + "<br/>Oggetto: " + arg+"</html>";
+		String labelText = "<html><b>Mittente: </b>" + mitt + "<br/><b>Oggetto:</b> " + arg+"</html>";
 		setText(labelText);
 
 		ImageIcon imageIcon;
@@ -474,11 +510,12 @@ class MyListCellRenderer extends JLabel implements ListCellRenderer<Email> {
 		
 		if (isSelected) {
 			setBackground(list.getSelectionBackground());
-			setForeground(list.getSelectionForeground());
+			//setForeground(list.getSelectionForeground());
 		} else {
             setBackground(list.getBackground());
-			setForeground(list.getForeground());
+			//setForeground(list.getForeground());
 		}
+		setBorder(BorderFactory.createLineBorder(Color.decode("#e1e8ef"),1,false));
 		return this;
 	}
 }

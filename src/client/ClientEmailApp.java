@@ -3,6 +3,9 @@ package client;
 
 
 import javax.swing.*;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -49,9 +52,9 @@ public class ClientEmailApp extends JFrame {
 		};
 
 		//Serve per il tema, in testing
-		//initLookAndFeel();
+		initLookAndFeel();
 		//A prescindere dal tema, usa gli elementi di sistema per chiudere, ridurre a icona, ecc
-		//setDefaultLookAndFeelDecorated(true);
+		setDefaultLookAndFeelDecorated(true);
 
 
 		addWindowListener(exitListener);
@@ -62,9 +65,9 @@ public class ClientEmailApp extends JFrame {
         setVisible(true);
 	}
 
-/*	private static void initLookAndFeel() {
+	private static void initLookAndFeel() {
 		String lookAndFeel = null;
-		final String LOOKANDFEEL = "Metal";
+		final String LOOKANDFEEL = "System";
 		final String THEME = "DefaultMetal";
 
 		if (LOOKANDFEEL != null) {
@@ -110,7 +113,7 @@ public class ClientEmailApp extends JFrame {
 			catch (Exception e) {
 			}
 		}
-	}*/
+	}
 
 	public static void main(String[] args) {
 		// TODO creare un input panel per chiedere nickname e emailAddress per poterlo personalizzare

@@ -1,7 +1,10 @@
-[ISTRUZIONI: quando un elemento della lista viene implementato/fixato, segnarlo col tag [FIXED] all'iniizo ]
+[ISTRUZIONI: quando un elemento della lista viene implementato/fixato, segnarlo col tag [DONE] all'iniizo ]
 
 -quando viene aperta una mail settare a true il valore di lettura anche nel file csv, così quando si apre la casella non abbiamo sempre le mail da leggere
--Settare caret all'inizio della textarea del testo email se si fa forward
--Fixare jlabel che allargano panel
 -Fixare formattazione testo email in modo che venga preservata
 -aggiungere la possibiltà di destinatari multipli
+
+-[DONE] Settare caret all'inizio della textarea del testo email se si fa forward
+-[DONE]Fixare jlabel che allargano panel
+-[DONE]Aggiustare visualizzazione posta in arrivo'
+-[DONE]Aggiungere scrollbar al campo testo delle email
