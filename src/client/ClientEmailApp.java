@@ -68,7 +68,7 @@ public class ClientEmailApp extends JFrame {
 	private static void initLookAndFeel() {
 		String lookAndFeel = null;
 		final String LOOKANDFEEL = "Metal";
-		final String THEME = "DefaultMetal";
+		final String THEME = "Ocean";
 
 		if (LOOKANDFEEL != null) {
 			if (LOOKANDFEEL.equals("Metal")) {
