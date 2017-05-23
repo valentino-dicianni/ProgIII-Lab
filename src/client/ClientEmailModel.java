@@ -64,7 +64,12 @@ public class ClientEmailModel extends Observable {
      */
 	public void openEmail(Email selectedEmail) {
 		selectedEmail.setRead(true);
-		setChanged();
+        try {
+            server.setReadMail(emailClient, selectedEmail);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        setChanged();
 		notifyObservers(selectedEmail);
 	}
 
@@ -155,6 +160,7 @@ public class ClientEmailModel extends Observable {
 	public void closeOperation(){
 		try {
 			server.appendToLog("Client disconnesso");
+			server.writeFile(emailClient);
 
 		} catch (RemoteException e1) {
 			e1.printStackTrace();

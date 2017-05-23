@@ -100,11 +100,22 @@ public class ServerEmailModel extends Observable {
             return newLogMessage;
         }
 
-
         public void clearLog(){
             setTestoLog("");
             setChanged();
             notifyObservers(this);
+        }
+
+        public void setReadMail(String address, Email mail){
+            ArrayList<Email> list = serverMailList.get(address);
+            if(list.contains(mail)){
+                for(Email iter : list){
+                    if(iter.equals(mail)){
+                        iter.setRead(true);
+                    }
+                }
+            }
+            else System.out.println("non c'è...spiace");
         }
 
         /**
@@ -114,31 +125,6 @@ public class ServerEmailModel extends Observable {
         @Override
         public synchronized boolean inviaMail(Email mail) throws RemoteException{
             if(serverMailList.containsKey(mail.getDestEmail())){
-                appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
-                Date dataSpedizioneEmail = mail.getDataSpedEmail();
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                String formattedDate = dateFormat.format(dataSpedizioneEmail);
-
-                BufferedWriter bw= null;
-                //scrittura su file
-                try {
-                    bw = new BufferedWriter (new FileWriter("src/server/email.csv", true));
-                    System.out.println(mail.getDataSpedEmail());
-                    bw.write(mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
-                                "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+formattedDate+
-                                "#false\n");
-                    bw.flush();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }finally {
-                    try {
-                        bw.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
                 mail.setTestoEmail(mail.getTestoEmail().replace("§","\n"));
                 serverMailList.get(mail.getDestEmail()).add(0,mail);
                 return true;
@@ -159,14 +145,14 @@ public class ServerEmailModel extends Observable {
         @Override
         public synchronized void deleteEmail(String key,Email mail) throws RemoteException {
             serverMailList.get(key).remove(mail);
-            removeFromFile();
+            //removeFromFile();
             appendToLog("Mail " + mail + " eliminata dall'account: " + key);
         }
 
         /**
          * funzione che sovrascrive il file email.csv con la lista aggiornata di email
          */
-        public synchronized void removeFromFile(){
+        public synchronized void writeFile(String address){
             BufferedWriter bw= null;
             try {
                 bw = new BufferedWriter (new FileWriter("src/server/email.csv"));
@@ -179,7 +165,7 @@ public class ServerEmailModel extends Observable {
                         String formattedDate = dateFormat.format(dataSpedizioneEmail);
 
                         bw.write(""+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
-                                "#"+mail.getTestoEmail()+"#"+ mail.getPriorEmail()+"#"+formattedDate+
+                                "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+"#"+formattedDate+
                                 "#"+mail.isRead()+"\n");
                         bw.flush();
 
@@ -189,9 +175,8 @@ public class ServerEmailModel extends Observable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
+
     }//fine Class Log
 
 
