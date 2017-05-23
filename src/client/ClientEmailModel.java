@@ -137,15 +137,29 @@ public class ClientEmailModel extends Observable {
      */
     public boolean sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
         try {
-            Date date = new Date();
-            String newTExtField = contentFieldText.replace("\n", "§");
-            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,newTExtField,1,date,false));
-            if(!success){
-                return false;
+
+            String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+            String SplitBy = ",";
+            String[] destinatari = toFieldText.split(SplitBy);
+            boolean success = true;
+            for(int i=0; i < destinatari.length && success!=false ;i++) {
+                if (destinatari[i].matches(emailPattern)) {
+                    System.out.println(destinatari[i]);
+                    String newTExtField = contentFieldText.replace("\n", "§");
+                }
+                else {
+                    return false;
+                }
+
             }
-            else{
-                System.out.println("Email inviata con successo al server...");
+            for(int i=0; i < destinatari.length && success!=false ;i++) {
+                Date date = new Date();
+                String newTExtField = contentFieldText.replace("\n", "§");
+                success = server.inviaMail(new Email(emailClient, destinatari[i], subjectFieldText, newTExtField, 1, date, false));
             }
+            System.out.println("Email inviata con successo al server...");
+
+
         } catch (RemoteException e) {
             e.printStackTrace();
             return false;
