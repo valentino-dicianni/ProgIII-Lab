@@ -82,4 +82,7 @@ public class ClientEmailController implements ActionListener, MouseListener {
 		}
 
 	}
+	public int getNumMsgNonLetti(){
+		return clientEmailMod.getNonLetti();
+	}
 }

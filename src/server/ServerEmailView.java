@@ -47,14 +47,18 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         JButton cleanButton = new JButton("Pulisci log");
+        cleanButton.setFont(new Font("Helvetica", Font.BOLD, 14));
         mainPanel.setBorder(BorderFactory.createTitledBorder("LOG"));
-
         logTxtArea.setEditable(false);
+        logTxtArea.setRows(10);
         logTxtArea.setBackground(Color.BLACK);
-        logTxtArea.setForeground(Color.WHITE);
+        logTxtArea.setForeground(Color.GREEN);
         logTxtArea.setText(text);
-
-        mainPanel.add(logTxtArea,BorderLayout.CENTER);
+        logTxtArea.setFont(new Font("Helvetica", Font.PLAIN, 14));
+        logTxtArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JScrollPane logTxTAreaPane = new JScrollPane(logTxtArea);
+        logTxTAreaPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        mainPanel.add(logTxTAreaPane,BorderLayout.CENTER);
         cleanButton.addActionListener(serverEmailCtrl);
         mainPanel.add(cleanButton,BorderLayout.SOUTH);
         return mainPanel;
@@ -63,8 +67,13 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
     private JPanel logOptions(){
         JPanel logOptionsPanel = new JPanel(new BorderLayout());
         JCheckBox colorCheckBoxBW = new JCheckBox("<html>Nero/<br>bianco</html>");
+        colorCheckBoxBW.setFont(new Font("Helvetica", Font.BOLD, 13));
         JCheckBox colorCheckBoxBG = new JCheckBox("<html>Nero/<br>Verde</html>");
+        colorCheckBoxBG.setFont(new Font("Helvetica", Font.BOLD, 13));
         JCheckBox colorCheckBoxWB = new JCheckBox("<html>Bianco/<br>Nero</html>");
+        colorCheckBoxWB.setFont(new Font("Helvetica", Font.BOLD, 13));
+
+        colorCheckBoxBG.setSelected(true);
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(colorCheckBoxBG);
