@@ -152,8 +152,7 @@ public class ClientEmailModel extends Observable {
             String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
             String SplitBy = ",";
             String[] destinatari = toFieldText.split(SplitBy);
-            boolean success = true;
-            for(int i=0; i < destinatari.length && success!=false ;i++) {
+            for(int i=0; i < destinatari.length ;i++) {
                 if (destinatari[i].matches(emailPattern)) {
                     System.out.println(destinatari[i]);
                     String newTExtField = contentFieldText.replace("\n", "§");
@@ -163,10 +162,10 @@ public class ClientEmailModel extends Observable {
                 }
 
             }
-            for(int i=0; i < destinatari.length && success!=false ;i++) {
+            for(int i=0; i < destinatari.length;i++) {
                 Date date = new Date();
                 String newTExtField = contentFieldText.replace("\n", "§");
-                success = server.inviaMail(new Email(emailClient, destinatari[i], subjectFieldText, newTExtField, 1, date, false));
+                boolean success = server.inviaMail(new Email(emailClient, destinatari[i], subjectFieldText, newTExtField, 1, date, false));
             }
             System.out.println("Email inviata con successo al server...");
 
