@@ -114,7 +114,6 @@ public class ServerEmailModel extends Observable {
         @Override
         public synchronized boolean inviaMail(Email mail) throws RemoteException{
             if(serverMailList.containsKey(mail.getDestEmail())){
-                serverMailList.get(mail.getDestEmail()).add(0,mail);
                 appendToLog("Mail inviata da " + mail.getMittEmail() + " a " + mail.getDestEmail());
                 Date dataSpedizioneEmail = mail.getDataSpedEmail();
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -140,6 +139,8 @@ public class ServerEmailModel extends Observable {
                     }
 
                 }
+                mail.setTestoEmail(mail.getTestoEmail().replace("§","\n"));
+                serverMailList.get(mail.getDestEmail()).add(0,mail);
                 return true;
 
             }//se la scrittura non è andata a buon fine
