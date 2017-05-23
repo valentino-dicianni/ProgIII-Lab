@@ -236,7 +236,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
         c.gridy = 0;
         c.weightx = 0;
         c.weighty = 0;
-		JLabel welcomeLabel = new JLabel("<html><b>Bentornato, "+clientEmailCtrl.getClientName()+". <br>Hai ricevuto n mail dal tuo ultimo accesso.</b></html>");
+		JLabel welcomeLabel = new JLabel("<html><b>Bentornato, "+clientEmailCtrl.getClientName()+". <br>Hai ricevuto "+clientEmailCtrl.getNumMsgNonLetti() +" mail dal tuo ultimo accesso.</b></html>");
 		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 15));
 		interactiveRightPanel.add(welcomeLabel,c);
 		interactiveRightPanel.revalidate();

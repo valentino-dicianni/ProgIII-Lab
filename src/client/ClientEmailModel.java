@@ -81,6 +81,17 @@ public class ClientEmailModel extends Observable {
 		notifyObservers("newEmailForm");
 	}
 
+	public int getNonLetti(){
+        int num = 0;
+	    try {
+            num = server.getInfoLetture(emailClient);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return num;
+
+    }
+
     /**
 	 * Metodo che inizializza la casella mail all'apertura
 	 * TODO aggiungere pull dal mail server delle ultime 15 mail

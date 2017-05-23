@@ -79,6 +79,19 @@ public class ServerEmailModel extends Observable {
             this.idLog = idLog;
         }
 
+        @Override
+        public int getInfoLetture(String address){
+            int num = 0;
+            ArrayList<Email> list = serverMailList.get(address);
+                for(Email iter : list){
+                    if(!iter.isRead()){
+                        num++;
+                    }
+                }
+            return num;
+        }
+
+        @Override
         public void appendToLog(String testoLog){
             setTestoLog(getTestoLog()+"\n"+newMessageLog(testoLog));
             setChanged();
@@ -106,7 +119,8 @@ public class ServerEmailModel extends Observable {
             notifyObservers(this);
         }
 
-        public void setReadMail(String address, Email mail){
+        @Override
+        public synchronized void setReadMail(String address, Email mail){
             ArrayList<Email> list = serverMailList.get(address);
             if(list.contains(mail)){
                 for(Email iter : list){
@@ -115,7 +129,8 @@ public class ServerEmailModel extends Observable {
                     }
                 }
             }
-            else System.out.println("non c'è...spiace");
+            else appendToLog("Errore: la mail "+mail+" non è presente nel database");
+
         }
 
         /**
@@ -134,7 +149,6 @@ public class ServerEmailModel extends Observable {
                 appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() +": Indirizzo mail non esistente" );
                 return false;
             }
-
         }
 
         @Override
@@ -145,7 +159,6 @@ public class ServerEmailModel extends Observable {
         @Override
         public synchronized void deleteEmail(String key,Email mail) throws RemoteException {
             serverMailList.get(key).remove(mail);
-            //removeFromFile();
             appendToLog("Mail " + mail + " eliminata dall'account: " + key);
         }
 
