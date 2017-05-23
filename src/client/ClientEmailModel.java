@@ -133,7 +133,8 @@ public class ClientEmailModel extends Observable {
     public boolean sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
         try {
             Date date = new Date();
-            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,contentFieldText,1,date,false));
+            String newTExtField = contentFieldText.replace("\n", "§");
+            boolean success = server.inviaMail(new Email(emailClient,toFieldText,subjectFieldText,newTExtField,1,date,false));
             if(!success){
                 return false;
             }

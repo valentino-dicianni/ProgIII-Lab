@@ -226,7 +226,7 @@ public class ServerEmailModel extends Observable {
                 int prior = Integer.parseInt(email[4]);
                 DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date dataSped = format.parse(email[5]);
-                Email mail = new Email(email[0], email[1], email[2], email[3], prior, dataSped, read);
+                Email mail = new Email(email[0], email[1], email[2], email[3].replace("§","\n"), prior, dataSped, read);
                 if (keyUser.equals(mail.getDestEmail()))
                     emailListUser.add(0,mail);
                 else if (keyUser2.equals(mail.getDestEmail()))
