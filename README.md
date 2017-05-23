@@ -2,7 +2,7 @@
 Progetto di Programmazione III - Dipartimento di Informatica UNITO (Torino, Italy)
 Anno 2016/2017
 
-# Comopnenti del Gruppo:
+# Componenti del Gruppo:
   - Valentino Di Cianni
   - Daniele Accossato
   - Francesco Pilittu
