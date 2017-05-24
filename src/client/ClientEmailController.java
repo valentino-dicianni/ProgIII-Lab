@@ -38,6 +38,9 @@ public class ClientEmailController implements ActionListener, MouseListener {
 		else if((((JButton) e.getSource()).getName())=="replyEmailBtn"){
 			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"reply");
 		}
+		else if((((JButton) e.getSource()).getName())=="replyAllEmailBtn"){
+			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"replyAll");
+		}
 
 	}
 
@@ -73,8 +76,8 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	    clientEmailMod.showMail();
     }
 
-	public boolean newEmail(String toFieldText, String subjectFieldText, String contentFieldText) throws RemoteException {
-		if(clientEmailMod.sendEmail(toFieldText,subjectFieldText,contentFieldText)){
+	public boolean newEmail(String toFieldText, String CcFieldText, String subjectFieldText, String contentFieldText) {
+		if(clientEmailMod.sendEmail(toFieldText,CcFieldText,subjectFieldText,contentFieldText)){
 			return true;
 		}
 		else{

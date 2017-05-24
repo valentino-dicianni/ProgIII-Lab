@@ -23,7 +23,7 @@ import javax.swing.border.TitledBorder;
 interface ClientEmailInterfaceView {
 	void updateClientGUI(Email selectedEmail);
 	JPanel newEmailPanel(ArrayList optEmailData);
-	JPanel readEmailPanel();
+	JPanel readEmailPanel(Email selectedEmail);
 }
 
 
@@ -38,13 +38,15 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	//new Email text vars
 	private JTextField newMailDest = new JTextField();
-	private JTextField newEmailSubject = new JTextField();
+    private JTextField newEmailCc = new JTextField();
+    private JTextField newEmailSubject = new JTextField();
 	private JTextArea newEmailText = new JTextArea();
 
 
 	//received Email vars
 	private JLabel receivedEmailSender = new JLabel();
 	private JLabel receivedEmailDest = new JLabel();
+	private JLabel receivedEmailCc = new JLabel();
 	private JLabel receivedEmailSubject = new JLabel();
 	private JLabel receivedEmailDate = new JLabel();
 	private JTextArea receivedEmailText = new JTextArea();
@@ -188,19 +190,16 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			sendMailButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						if (clientEmailCtrl.newEmail(newMailDest.getText(), newEmailSubject.getText(), newEmailText.getText())){
-							newEmailSubject.setText("");
-							newMailDest.setText("");
-							newEmailText.setText("");
-						}
-						else{
-							System.out.println("inserire un indirizzo mail corretto");
-							JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
-						}
-					} catch (RemoteException e1) {
-						e1.printStackTrace();
-					}
+					if (clientEmailCtrl.newEmail(newMailDest.getText(),newEmailCc.getText(), newEmailSubject.getText(), newEmailText.getText())){
+                        newEmailSubject.setText("");
+                        newEmailCc.setText("");
+                        newMailDest.setText("");
+                        newEmailText.setText("");
+                    }
+                    else{
+                        System.out.println("inserire un indirizzo mail corretto");
+                        JOptionPane.showMessageDialog(null, "ATTENZIONE: indirizzo mail errato", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
+                    }
 				}
 			});
 
@@ -278,7 +277,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			this.remove(interactiveTopPanel);
 			this.remove(interactiveRightPanel);
 			this.revalidate();
-			this.add(readEmailPanel(),c);
+			this.add(readEmailPanel((Email)arg1),c);
 			this.add(TopRightPanel(true,false), topRightPanelConst);
 			this.repaint();
 		}
@@ -316,6 +315,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		receivedEmailSender.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		receivedEmailDest.setText("<html><b>A:</b> "+selectedEmail.getDestEmail()+"</html>");
 		receivedEmailDest.setFont(new Font("Helvetica", Font.PLAIN, 13));
+        receivedEmailCc.setText("<html><b>Cc:</b> "+selectedEmail.getCcString()+"</html>");
+        receivedEmailCc.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		receivedEmailSubject.setText("<html><b>OGGETTO:</b> "+selectedEmail.getArgEmail()+"</html>");
 		receivedEmailSubject.setFont(new Font("Helvetica", Font.PLAIN, 13));
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -332,10 +333,13 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	public JPanel newEmailPanel(ArrayList optEmailData) {
 		JLabel labelTo = new JLabel();
 		JLabel labelSubj = new JLabel();
+		JLabel labelCc = new JLabel();
 		labelTo.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		labelSubj.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		labelCc.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		newEmailSubject.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		newMailDest.setFont(new Font("Helvetica", Font.PLAIN, 13));
+		newEmailCc.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		newEmailText.setFont(new Font("Helvetica", Font.PLAIN, 14));
 		newEmailText.setRows(30);
         interactiveRightPanel.removeAll();
@@ -343,8 +347,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
         	newEmailText.setText("\n\n--------MESSAGGIO INOLTRATO--------" +
 			"\n\nDA: <"+optEmailData.get(1).toString()+">"+
 			"\nA: <" +optEmailData.get(2).toString()+">"+
-			"\nOGGETTO: "+optEmailData.get(3)+
-			"\nCc: \n"+optEmailData.get(4)+
+			"\nOGGETTO: "+optEmailData.get(4)+
+			"\nCc: <"+optEmailData.get(3)+">"+
 			"\n\n ------------------------------");
             newEmailText.getCaret().setVisible(true);
             newEmailText.setCaretPosition(0);
@@ -353,14 +357,26 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		}
 		else if(optEmailData != null && optEmailData.get(0).toString() =="reply"){
         	newMailDest.setText(optEmailData.get(1).toString());
-        	newEmailSubject.setText("RE: "+optEmailData.get(3).toString());
-			newEmailText.setText("\n\n--------IIn risposta a--------" +
+        	newEmailSubject.setText("RE: "+optEmailData.get(4).toString());
+			newEmailText.setText("\n\n--------In risposta a--------" +
 					"\n\nDA: <"+optEmailData.get(1).toString()+">"+
-					"\nCc: \n"+optEmailData.get(4)+
+					"\n\nOGGETTO: <"+optEmailData.get(4).toString()+">"+
 					"\n\n ------------------------------");
 			newEmailText.getCaret().setVisible(true);
 			newEmailText.setCaretPosition(0);
 		}
+        else if(optEmailData != null && optEmailData.get(0).toString() =="replyAll") {
+            newMailDest.setText(optEmailData.get(1).toString());
+            newEmailCc.setText(optEmailData.get(3).toString());
+            newEmailSubject.setText("RE: "+optEmailData.get(4).toString());
+            newEmailText.setText("\n\n--------In risposta a--------" +
+                    "\n\nDA: <"+optEmailData.get(1).toString()+">"+
+                    "\nCc: <"+optEmailData.get(3)+">"+
+                    "\n\nOGGETTO: <"+optEmailData.get(4).toString()+">"+
+                    "\n\n ------------------------------");
+            newEmailText.getCaret().setVisible(true);
+            newEmailText.setCaretPosition(0);
+        }
 		else {
 			newEmailText.setText("");
 		}
@@ -379,11 +395,17 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.gridy++;
 		headerPanel.add(newMailDest,c);
 		c.gridy++;
+		labelCc.setText("Cc:");
+		headerPanel.add(labelCc,c);
+		c.gridy++;
+		headerPanel.add(newEmailCc,c);
+		c.gridy++;
 		labelSubj.setText("Oggetto:");
 		headerPanel.add(labelSubj,c);
 		c.gridy++;
 		headerPanel.add(newEmailSubject,c);
 		c.gridy++;
+
 
 		JPanel bodyPanel = new JPanel(new GridBagLayout());
 		c.weighty = 1;
@@ -415,7 +437,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	/**
 	 * Metodo avente compito di creazione pannello di visualizzione email ricevuta*/
 	@Override
-	public JPanel readEmailPanel() {
+	public JPanel readEmailPanel(Email selectedEmail) {
 		interactiveRightPanel.removeAll();
 		interactiveRightPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -435,6 +457,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		c.gridy++;
 		headerPanel.add(receivedEmailDest,c);
 		c.gridy++;
+        headerPanel.add(receivedEmailCc,c);
+        c.gridy++;
 		headerPanel.add(receivedEmailSubject,c);
 		c.gridy++;
         headerPanel.add(receivedEmailDate,c);
@@ -471,8 +495,13 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		replyBtn.setName("replyEmailBtn");
 		replyBtn.addActionListener(clientEmailCtrl);
 		footerPanel.add(replyBtn);
-		//JButton replyAllBtn = new JButton("Reply All");
-		//footerPanel.add(replyAllBtn);
+		if(!selectedEmail.getCcString().equals("")){
+            JButton replyAllBtn = new JButton("Rispondi a tutti");
+            replyAllBtn.setFont(new Font("Helvetica", Font.BOLD, 13));
+            replyAllBtn.setName("replyAllEmailBtn");
+            replyAllBtn.addActionListener(clientEmailCtrl);
+            footerPanel.add(replyAllBtn);
+		}
 		interactiveRightPanel.add(footerPanel,c);
 
 		interactiveRightPanel.revalidate();

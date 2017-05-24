@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Observable;
 
@@ -121,6 +122,7 @@ public class ClientEmailModel extends Observable {
         a.add(action);
         a.add(openedEmail.getMittEmail());
         a.add(openedEmail.getDestEmail());
+        a.add(openedEmail.getCcString());
         a.add(openedEmail.getArgEmail());
         a.add(openedEmail.getTestoEmail());
 
@@ -146,38 +148,42 @@ public class ClientEmailModel extends Observable {
      * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server. In caso di errore avvisa l'utente
      * tramite finestra di dialog!
      */
-    public boolean sendEmail(String toFieldText, String subjectFieldText, String contentFieldText) {
+    public boolean sendEmail(String toFieldText, String ccFieldText, String subjectFieldText, String contentFieldText) {
+        boolean success = false;
         try {
-
             String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-            String SplitBy = ",";
-            String[] destinatari = toFieldText.split(SplitBy);
-            for(int i=0; i < destinatari.length ;i++) {
-                if (destinatari[i].matches(emailPattern)) {
-                    System.out.println(destinatari[i]);
-                    String newTExtField = contentFieldText.replace("\n", "§");
+            Date date = new Date();
+            String newTExtField = contentFieldText.replace("\n", "§");
+
+            //nel caso ci fossero più persone a ricevere la mail
+            if (!ccFieldText.equals("")) {
+                String[] destinatari = ccFieldText.split(",");
+                ArrayList<String> destcC = new ArrayList<>(Arrays.asList(destinatari));
+
+                for (int i = 0; i < destinatari.length; i++) {
+                    if (destinatari[i].matches(emailPattern)) {
+                        success = server.inviaMail(new Email(emailClient,destinatari[i], destcC, subjectFieldText, newTExtField, 1, date, false));
+
+                    }
                 }
-                else {
-                    return false;
-                }
-
+                //sia ai destinatari sia al primo  dest
+                success = server.inviaMail(new Email(emailClient,toFieldText, destcC, subjectFieldText, newTExtField, 1, date, false));
             }
-            for(int i=0; i < destinatari.length;i++) {
-                Date date = new Date();
-                String newTExtField = contentFieldText.replace("\n", "§");
-                boolean success = server.inviaMail(new Email(emailClient, destinatari[i], subjectFieldText, newTExtField, 1, date, false));
+            //se mandata solo ad una persona
+            else{
+                success = server.inviaMail(new Email(emailClient, toFieldText, subjectFieldText, newTExtField, 1, date, false));
             }
-            System.out.println("Email inviata con successo al server...");
+            if(success){System.out.println("Email inviata con successo al server...");}
 
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return false;
+        } catch(RemoteException e){
+                e.printStackTrace();
         }
-        return true;
+
+        return success;
     }
 
-    /**
+
+        /**
      * Metodo che al momento della chiusura del client mail
      * notifica al server l'avvenuta chiusura.
      */

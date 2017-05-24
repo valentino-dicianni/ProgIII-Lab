@@ -1,10 +1,12 @@
 package commonResources;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Email implements Serializable {
   	private String mittEmail, destEmail, argEmail, testoEmail;
+  	private ArrayList<String> multiDes = new ArrayList<>();
   	private int priorEmail;
   	private Date dataSpedEmail;
   	boolean isRead;
@@ -19,6 +21,19 @@ public class Email implements Serializable {
 		this.priorEmail = prior;
 		this.dataSpedEmail = dataSped;
 		this.isRead = isRead;
+	}
+
+	public Email(String mitt, String dest, ArrayList<String> multiDes,
+				 String arg, String testo, int prior, Date dataSped, boolean isRead){
+		this.mittEmail = mitt;
+		this.destEmail = dest;
+		this.multiDes = multiDes;
+		this.argEmail = arg;
+		this.testoEmail = testo;
+		this.priorEmail = prior;
+		this.dataSpedEmail = dataSped;
+		this.isRead = isRead;
+
 	}
 	
 	public boolean isRead() {
@@ -76,6 +91,21 @@ public class Email implements Serializable {
 	public String getMittEmail(){
 		return mittEmail;			
 	}
+
+    public ArrayList<String> getMultiDes() {
+        return multiDes;
+    }
+
+    public String getCcString(){
+	    String res="";
+	    for(String iter:multiDes){
+	        res=res+iter+",";
+        }
+        if (!res.equals("") && res.length() > 0 ) {
+            res = res.substring(0, res.length()-1);
+        }
+        return res;
+    }
 
     @Override
     public boolean equals(Object o) {

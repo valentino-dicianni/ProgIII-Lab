@@ -176,10 +176,22 @@ public class ServerEmailModel extends Observable {
                         Date dataSpedizioneEmail = mail.getDataSpedEmail();
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         String formattedDate = dateFormat.format(dataSpedizioneEmail);
-
-                        bw.write(""+mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
+                        if(mail.getMultiDes().isEmpty()){
+                            bw.write(mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
                                 "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+"#"+formattedDate+
-                                "#"+mail.isRead()+"\n");
+                                "#"+mail.isRead()+"#"+"\n");
+                        }
+                        else{
+                            String strFilal =(mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
+                                    "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+"#"+formattedDate+
+                                    "#"+mail.isRead()+"#");
+                            for(String iter:mail.getMultiDes()){
+                            strFilal =strFilal+iter+",";
+                            }
+                            bw.write(strFilal+"\n");
+
+                        }
+
                         bw.flush();
 
                     }
@@ -221,11 +233,18 @@ public class ServerEmailModel extends Observable {
             br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null) {
                 String[] email = line.split(cvsSplitBy);
+                Email mail;
+
                 boolean read = Boolean.parseBoolean(email[6]);
                 int prior = Integer.parseInt(email[4]);
                 DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date dataSped = format.parse(email[5]);
-                Email mail = new Email(email[0], email[1], email[2], email[3].replace("§","\n"), prior, dataSped, read);
+                if(email.length > 7){
+                    String[] cCdest = email[7].split(",");
+                    ArrayList<String> cCField = new ArrayList<>(Arrays.asList(cCdest));
+                    mail = new Email(email[0], email[1], cCField, email[2], email[3].replace("§","\n"), prior, dataSped, read);
+                }
+                else{mail = new Email(email[0], email[1], email[2], email[3].replace("§","\n"), prior, dataSped, read);}
                 if (keyUser.equals(mail.getDestEmail()))
                     emailListUser.add(0,mail);
                 else if (keyUser2.equals(mail.getDestEmail()))
