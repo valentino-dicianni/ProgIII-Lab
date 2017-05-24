@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 
 
@@ -349,6 +347,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			"\nA: <" +optEmailData.get(2).toString()+">"+
 			"\nOGGETTO: "+optEmailData.get(4)+
 			"\nCc: <"+optEmailData.get(3)+">"+
+			"\nTESTO:\n:"+optEmailData.get(5)+">"+
 			"\n\n ------------------------------");
             newEmailText.getCaret().setVisible(true);
             newEmailText.setCaretPosition(0);
@@ -361,7 +360,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			newEmailText.setText("\n\n--------In risposta a--------" +
 					"\n\nDA: <"+optEmailData.get(1).toString()+">"+
 					"\n\nOGGETTO: <"+optEmailData.get(4).toString()+">"+
-					"\n\n ------------------------------");
+                    "\nTESTO: <"+optEmailData.get(5)+">"+
+                    "\n\n ------------------------------");
 			newEmailText.getCaret().setVisible(true);
 			newEmailText.setCaretPosition(0);
 		}
@@ -373,6 +373,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
                     "\n\nDA: <"+optEmailData.get(1).toString()+">"+
                     "\nCc: <"+optEmailData.get(3)+">"+
                     "\n\nOGGETTO: <"+optEmailData.get(4).toString()+">"+
+                    "\nTESTO: <"+optEmailData.get(5)+">"+
                     "\n\n ------------------------------");
             newEmailText.getCaret().setVisible(true);
             newEmailText.setCaretPosition(0);
