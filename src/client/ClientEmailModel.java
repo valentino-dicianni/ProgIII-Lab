@@ -98,14 +98,14 @@ public class ClientEmailModel extends Observable {
 	 * TODO aggiungere pull dal mail server delle ultime 15 mail
 	 */
 	public void showMail()  {
-        ArrayList serverList = null;
+        ArrayList<Email> serverList =new ArrayList();
         try {
             serverList = server.getEmail(emailClient);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        for (Object mail : serverList) {
-			mailList.addElement((Email)mail);
+        for (Email mail : serverList) {
+			mailList.addElement(mail);
 		}
 		setChanged();
 		notifyObservers("updateMailList");
@@ -122,9 +122,9 @@ public class ClientEmailModel extends Observable {
         a.add(action);
         a.add(openedEmail.getMittEmail());
         a.add(openedEmail.getDestEmail());
-        a.add(openedEmail.getCcString());
         a.add(openedEmail.getArgEmail());
         a.add(openedEmail.getTestoEmail());
+        a.add(openedEmail.getDest());
 
         setChanged();
         notifyObservers(a);
@@ -148,31 +148,21 @@ public class ClientEmailModel extends Observable {
      * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server. In caso di errore avvisa l'utente
      * tramite finestra di dialog!
      */
-    public boolean sendEmail(String toFieldText, String ccFieldText, String subjectFieldText, String contentFieldText) {
+    public boolean sendEmail(ArrayList<String> toFieldText,String dest, String subjectFieldText, String contentFieldText) {
         boolean success = false;
         try {
             String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
             Date date = new Date();
             String newTExtField = contentFieldText.replace("\n", "§");
 
-            //nel caso ci fossero più persone a ricevere la mail
-            if (!ccFieldText.equals("")) {
-                String[] destinatari = ccFieldText.split(",");
-                ArrayList<String> destcC = new ArrayList<>(Arrays.asList(destinatari));
-
-                for (int i = 0; i < destinatari.length; i++) {
-                    if (destinatari[i].matches(emailPattern)) {
-                        success = server.inviaMail(new Email(emailClient,destinatari[i], destcC, subjectFieldText, newTExtField, 1, date, false));
-
-                    }
+            if (!toFieldText.isEmpty()) {
+                for (String destinatario:toFieldText) {
+                    if (!destinatario.matches(emailPattern)) {return success;}
+                    success = server.inviaMail(new Email(emailClient,destinatario,toFieldText, subjectFieldText, newTExtField, 1, date, false));
                 }
-                //sia ai destinatari sia al primo  dest
-                success = server.inviaMail(new Email(emailClient,toFieldText, destcC, subjectFieldText, newTExtField, 1, date, false));
+
             }
-            //se mandata solo ad una persona
-            else{
-                success = server.inviaMail(new Email(emailClient, toFieldText, subjectFieldText, newTExtField, 1, date, false));
-            }
+
             if(success){System.out.println("Email inviata con successo al server...");}
 
         } catch(RemoteException e){

@@ -139,16 +139,19 @@ public class ServerEmailModel extends Observable {
          * nel caso in cui non esistelle la casella mail a cui aggiungerla: messaggio di errore*/
         @Override
         public synchronized boolean inviaMail(Email mail) throws RemoteException{
-            if(serverMailList.containsKey(mail.getDestEmail())){
-                mail.setTestoEmail(mail.getTestoEmail().replace("§","\n"));
-                serverMailList.get(mail.getDestEmail()).add(0,mail);
-                return true;
+            boolean success;
+                if (serverMailList.containsKey(mail.getDest())) {
+                    mail.setTestoEmail(mail.getTestoEmail().replace("§", "\n"));
+                    serverMailList.get(mail.getDest()).add(0, mail);
+                    success = true;
 
-            }//se la scrittura non è andata a buon fine
-            else{
-                appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() +": Indirizzo mail non esistente" );
-                return false;
-            }
+                }//se la scrittura non è andata a buon fine
+                else {
+                    appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() + ": Indirizzo mail non esistente");
+                    success = false;
+                }
+
+            return success;
         }
 
         @Override
@@ -166,7 +169,7 @@ public class ServerEmailModel extends Observable {
          * funzione che sovrascrive il file email.csv con la lista aggiornata di email
          */
         public synchronized void writeFile(String address){
-            BufferedWriter bw= null;
+            BufferedWriter bw;
             try {
                 bw = new BufferedWriter (new FileWriter("src/server/email.csv"));
                 for (String key: serverMailList.keySet()) {
@@ -176,24 +179,12 @@ public class ServerEmailModel extends Observable {
                         Date dataSpedizioneEmail = mail.getDataSpedEmail();
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         String formattedDate = dateFormat.format(dataSpedizioneEmail);
-                        if(mail.getMultiDes().isEmpty()){
-                            bw.write(mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
-                                "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+"#"+formattedDate+
-                                "#"+mail.isRead()+"#"+"\n");
-                        }
-                        else{
-                            String strFilal =(mail.getMittEmail()+"#"+mail.getDestEmail()+"#"+mail.getArgEmail()+
-                                    "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+"#"+formattedDate+
-                                    "#"+mail.isRead()+"#");
-                            for(String iter:mail.getMultiDes()){
-                            strFilal =strFilal+iter+",";
-                            }
-                            bw.write(strFilal+"\n");
 
-                        }
+                        bw.write(mail.getMittEmail()+"#"+mail.getDest()+"#"+mail.getArgEmail()+
+                                "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+
+                                "#"+formattedDate+"#"+mail.isRead()+"#"+mail.getCcString()+"\n");
 
                         bw.flush();
-
                     }
                 }
                 bw.close();
@@ -239,19 +230,18 @@ public class ServerEmailModel extends Observable {
                 int prior = Integer.parseInt(email[4]);
                 DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date dataSped = format.parse(email[5]);
-                if(email.length > 7){
-                    String[] cCdest = email[7].split(",");
-                    ArrayList<String> cCField = new ArrayList<>(Arrays.asList(cCdest));
-                    mail = new Email(email[0], email[1], cCField, email[2], email[3].replace("§","\n"), prior, dataSped, read);
-                }
-                else{mail = new Email(email[0], email[1], email[2], email[3].replace("§","\n"), prior, dataSped, read);}
-                if (keyUser.equals(mail.getDestEmail()))
+
+                String[] dests = email[7].split(",");
+                ArrayList<String> cCField = new ArrayList<>(Arrays.asList(dests));
+                mail = new Email(email[0], email[1], cCField,email[2],email[3].replace("§","\n"), prior, dataSped, read);
+
+                if (keyUser.equals(email[1]))
                     emailListUser.add(0,mail);
-                else if (keyUser2.equals(mail.getDestEmail()))
+                else if (keyUser2.equals(email[1]))
                     emailListUser2.add(0,mail);
-                else if (keyUser3.equals(mail.getDestEmail()))
+                else if (keyUser3.equals(email[1]))
                     emailListUser3.add(0,mail);
-               else
+                else
                     System.out.print("Mail non appartenente ad un utente del nostro servizio");
             }
             this.serverMailList.put(keyUser, emailListUser);

@@ -5,17 +5,18 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Email implements Serializable {
-  	private String mittEmail, destEmail, argEmail, testoEmail;
-  	private ArrayList<String> multiDes = new ArrayList<>();
+	private ArrayList<String> destsEmail = new ArrayList<>();
+	private String mittEmail ,dest, argEmail, testoEmail;
   	private int priorEmail;
   	private Date dataSpedEmail;
   	boolean isRead;
 
   	/*TODO: modificare il campo destinatari! deve essere una lista (ArrayList preferibilmente) di stringhe*/
 
-	public Email(String mitt, String dest, String arg, String testo, int prior, Date dataSped, boolean isRead){
-		this.mittEmail = mitt;
-		this.destEmail = dest;
+	public Email(String mitt, String dest, ArrayList<String> dests, String arg, String testo, int prior, Date dataSped, boolean isRead){
+        this.mittEmail = mitt;
+        this.dest = dest;
+        this.destsEmail = dests;
 		this.argEmail = arg;
 		this.testoEmail = testo;
 		this.priorEmail = prior;
@@ -23,19 +24,6 @@ public class Email implements Serializable {
 		this.isRead = isRead;
 	}
 
-	public Email(String mitt, String dest, ArrayList<String> multiDes,
-				 String arg, String testo, int prior, Date dataSped, boolean isRead){
-		this.mittEmail = mitt;
-		this.destEmail = dest;
-		this.multiDes = multiDes;
-		this.argEmail = arg;
-		this.testoEmail = testo;
-		this.priorEmail = prior;
-		this.dataSpedEmail = dataSped;
-		this.isRead = isRead;
-
-	}
-	
 	public boolean isRead() {
 		return isRead;
 	}
@@ -44,15 +32,15 @@ public class Email implements Serializable {
 		this.isRead = isRead;
 	}
 
-	public String getDestEmail() {
-		return destEmail;
-	}
+    public ArrayList<String> getDestEmail() {
+        return destsEmail;
+    }
 
-	public void setDestEmail(String destEmail) {
-		this.destEmail = destEmail;
-	}
+    public String getDest() {
+        return dest;
+    }
 
-	public String getArgEmail() {
+    public String getArgEmail() {
 		return argEmail;
 	}
 
@@ -84,21 +72,14 @@ public class Email implements Serializable {
 		this.dataSpedEmail = dataSpedEmail;
 	}
 
-	public void setMittEmail(String mittEmail) {
-		this.mittEmail = mittEmail;
-	}
 
-	public String getMittEmail(){
-		return mittEmail;			
-	}
-
-    public ArrayList<String> getMultiDes() {
-        return multiDes;
+    public String getMittEmail() {
+        return mittEmail;
     }
 
     public String getCcString(){
 	    String res="";
-	    for(String iter:multiDes){
+	    for(String iter:destsEmail){
 	        res=res+iter+",";
         }
         if (!res.equals("") && res.length() > 0 ) {
@@ -111,7 +92,7 @@ public class Email implements Serializable {
     public boolean equals(Object o) {
 	    Email mail = (Email)o;
         if(this.mittEmail.equals(mail.getMittEmail()) &&
-                this.destEmail.equals(mail.getDestEmail()) &&
+                this.destsEmail.equals(mail.getDestEmail()) &&
                 this.argEmail.equals(mail.getArgEmail()) &&
                 this.testoEmail.equals(mail.getTestoEmail())){return true;}
         else return false;

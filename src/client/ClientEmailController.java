@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 
 import javax.swing.*;
@@ -76,8 +77,8 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	    clientEmailMod.showMail();
     }
 
-	public boolean newEmail(String toFieldText, String CcFieldText, String subjectFieldText, String contentFieldText) {
-		if(clientEmailMod.sendEmail(toFieldText,CcFieldText,subjectFieldText,contentFieldText)){
+	public boolean newEmail(ArrayList<String> toFieldText, String subjectFieldText, String contentFieldText) {
+		if(clientEmailMod.sendEmail(toFieldText, "", subjectFieldText, contentFieldText)){
 			return true;
 		}
 		else{

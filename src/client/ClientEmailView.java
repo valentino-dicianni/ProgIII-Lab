@@ -9,9 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -36,7 +34,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 
 	//new Email text vars
 	private JTextField newMailDest = new JTextField();
-    private JTextField newEmailCc = new JTextField();
     private JTextField newEmailSubject = new JTextField();
 	private JTextArea newEmailText = new JTextArea();
 
@@ -188,9 +185,11 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			sendMailButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (clientEmailCtrl.newEmail(newMailDest.getText(),newEmailCc.getText(), newEmailSubject.getText(), newEmailText.getText())){
+					String[] splits = newMailDest.getText().split(",");
+					ArrayList<String> dests = new ArrayList<>(Arrays.asList(splits));
+
+					if (clientEmailCtrl.newEmail(dests, newEmailSubject.getText(), newEmailText.getText())){
                         newEmailSubject.setText("");
-                        newEmailCc.setText("");
                         newMailDest.setText("");
                         newEmailText.setText("");
                     }
@@ -311,10 +310,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		clientEmailList.setCellRenderer(new MyListCellRenderer());
 		receivedEmailSender.setText("<html><b>DA: </b>"+selectedEmail.getMittEmail()+"</html>");
 		receivedEmailSender.setFont(new Font("Helvetica", Font.PLAIN, 13));
-		receivedEmailDest.setText("<html><b>A:</b> "+selectedEmail.getDestEmail()+"</html>");
+		receivedEmailDest.setText("<html><b>A:</b> "+selectedEmail.getCcString()+"</html>");
 		receivedEmailDest.setFont(new Font("Helvetica", Font.PLAIN, 13));
-        receivedEmailCc.setText("<html><b>Cc:</b> "+selectedEmail.getCcString()+"</html>");
-        receivedEmailCc.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		receivedEmailSubject.setText("<html><b>OGGETTO:</b> "+selectedEmail.getArgEmail()+"</html>");
 		receivedEmailSubject.setFont(new Font("Helvetica", Font.PLAIN, 13));
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -337,7 +334,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		labelCc.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		newEmailSubject.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		newMailDest.setFont(new Font("Helvetica", Font.PLAIN, 13));
-		newEmailCc.setFont(new Font("Helvetica", Font.PLAIN, 13));
 		newEmailText.setFont(new Font("Helvetica", Font.PLAIN, 14));
 		newEmailText.setRows(30);
         interactiveRightPanel.removeAll();
@@ -345,9 +341,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
         	newEmailText.setText("\n\n--------MESSAGGIO INOLTRATO--------" +
 			"\n\nDA: <"+optEmailData.get(1).toString()+">"+
 			"\nA: <" +optEmailData.get(2).toString()+">"+
-			"\nOGGETTO: "+optEmailData.get(4)+
-			"\nCc: <"+optEmailData.get(3)+">"+
-			"\nTESTO:\n:"+optEmailData.get(5)+">"+
+			"\nOGGETTO: "+optEmailData.get(3).toString()+
+			"\nTESTO:\n:"+optEmailData.get(4).toString()+">"+
 			"\n\n ------------------------------");
             newEmailText.getCaret().setVisible(true);
             newEmailText.setCaretPosition(0);
@@ -356,24 +351,36 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		}
 		else if(optEmailData != null && optEmailData.get(0).toString() =="reply"){
         	newMailDest.setText(optEmailData.get(1).toString());
-        	newEmailSubject.setText("RE: "+optEmailData.get(4).toString());
+        	newEmailSubject.setText("RE: "+optEmailData.get(3).toString());
 			newEmailText.setText("\n\n--------In risposta a--------" +
 					"\n\nDA: <"+optEmailData.get(1).toString()+">"+
-					"\n\nOGGETTO: <"+optEmailData.get(4).toString()+">"+
-                    "\nTESTO: <"+optEmailData.get(5)+">"+
+					"\n\nOGGETTO: <"+optEmailData.get(3).toString()+">"+
+                    "\nTESTO:\n "+optEmailData.get(4).toString()+
                     "\n\n ------------------------------");
 			newEmailText.getCaret().setVisible(true);
 			newEmailText.setCaretPosition(0);
 		}
         else if(optEmailData != null && optEmailData.get(0).toString() =="replyAll") {
-            newMailDest.setText(optEmailData.get(1).toString());
-            newEmailCc.setText(optEmailData.get(3).toString());
-            newEmailSubject.setText("RE: "+optEmailData.get(4).toString());
+            HashSet<String> newDest = new HashSet<>();
+            newDest.add(optEmailData.get(1).toString());
+            ArrayList<String> dst = (ArrayList<String>) optEmailData.get(2);
+            newDest.addAll(dst);
+            String res = "";
+            for(String str:newDest){
+                if(str != optEmailData.get(5))
+                    res =res+str+",";
+            }
+            if (!res.equals("") && res.length() > 0 ) {
+                res = res.substring(0, res.length()-1);
+            }
+
+            newMailDest.setText(res);
+            newEmailSubject.setText("RE: "+optEmailData.get(3).toString());
             newEmailText.setText("\n\n--------In risposta a--------" +
                     "\n\nDA: <"+optEmailData.get(1).toString()+">"+
-                    "\nCc: <"+optEmailData.get(3)+">"+
-                    "\n\nOGGETTO: <"+optEmailData.get(4).toString()+">"+
-                    "\nTESTO: <"+optEmailData.get(5)+">"+
+                    "\nA: <"+res+">"+
+                    "\n\nOGGETTO: <"+optEmailData.get(3).toString()+">"+
+                    "\nTESTO:\n"+optEmailData.get(4).toString()+
                     "\n\n ------------------------------");
             newEmailText.getCaret().setVisible(true);
             newEmailText.setCaretPosition(0);
@@ -395,11 +402,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		headerPanel.add(labelTo,c);
 		c.gridy++;
 		headerPanel.add(newMailDest,c);
-		c.gridy++;
-		labelCc.setText("Cc:");
-		headerPanel.add(labelCc,c);
-		c.gridy++;
-		headerPanel.add(newEmailCc,c);
 		c.gridy++;
 		labelSubj.setText("Oggetto:");
 		headerPanel.add(labelSubj,c);
@@ -496,7 +498,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		replyBtn.setName("replyEmailBtn");
 		replyBtn.addActionListener(clientEmailCtrl);
 		footerPanel.add(replyBtn);
-		if(!selectedEmail.getCcString().equals("")){
+		if(selectedEmail.getDestEmail().size()>1){
             JButton replyAllBtn = new JButton("Rispondi a tutti");
             replyAllBtn.setFont(new Font("Helvetica", Font.BOLD, 13));
             replyAllBtn.setName("replyAllEmailBtn");
