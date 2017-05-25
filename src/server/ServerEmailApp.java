@@ -1,26 +1,17 @@
 package server;
 
-import commonResources.Email;
-
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-/**
- * Created by Daniele on 05/05/2017.
- */
 public class ServerEmailApp extends JFrame {
     public ServerEmailApp(){
         // Modello
         ServerEmailModel serverEmailMod = new ServerEmailModel();
 
-
         // Controller
         ServerEmailController serverEmailCtrl = new ServerEmailController(serverEmailMod);
 
         // View
-        ServerEmailView serverEmailView = null;
-        serverEmailView = new ServerEmailView(serverEmailCtrl);
+        ServerEmailView serverEmailView =  new ServerEmailView(serverEmailCtrl);
 
         //Instaurazione relazione observer-observerable tra vista (Observer) e modello (Observable)
         serverEmailMod.addObserver(serverEmailView);

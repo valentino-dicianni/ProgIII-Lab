@@ -41,7 +41,6 @@ public class ClientEmailController implements ActionListener, MouseListener {
 		else if((((JButton) e.getSource()).getName())=="replyAllEmailBtn"){
 			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"replyAll");
 		}
-
 	}
 
 	@Override
@@ -77,13 +76,12 @@ public class ClientEmailController implements ActionListener, MouseListener {
     }
 
 	public boolean newEmail(ArrayList<String> toFieldText, String subjectFieldText, String contentFieldText) {
-		if(clientEmailMod.sendEmail(toFieldText, "", subjectFieldText, contentFieldText)){
+		if(clientEmailMod.sendEmail(toFieldText, subjectFieldText, contentFieldText)){
 			return true;
 		}
 		else{
 			return false;
 		}
-
 	}
 	public int getNumMsgNonLetti(){
 		return clientEmailMod.getNonLetti();

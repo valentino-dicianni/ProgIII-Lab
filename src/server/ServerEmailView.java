@@ -1,19 +1,15 @@
 package server;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Created by Daniele on 05/05/2017.
- */
-
 interface ServerEmailInterfaceView {
-
+    JPanel logAreaPanel(String text);
+    JPanel logOptions();
 }
 
 public class ServerEmailView extends JPanel implements ServerEmailInterfaceView, Observer {
@@ -39,10 +35,10 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         c.fill = GridBagConstraints.HORIZONTAL;
         add(logOptions(),c);
 
-        serverEmailCtrl.createLog(1,"log1",logTxtArea.getText(),null);
+        serverEmailCtrl.createLog("log1",logTxtArea.getText(),null);
     }
 
-    private JPanel logAreaPanel(String text) {
+    public JPanel logAreaPanel(String text) {
         removeAll();
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -64,7 +60,7 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         return mainPanel;
     }
 
-    private JPanel logOptions(){
+    public JPanel logOptions(){
         JPanel logOptionsPanel = new JPanel(new BorderLayout());
         JCheckBox colorCheckBoxBW = new JCheckBox("<html>Nero/<br>bianco</html>");
         colorCheckBoxBW.setFont(new Font("Helvetica", Font.BOLD, 13));
@@ -109,7 +105,9 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         return logOptionsPanel;
     }
 
-    /* Una volta inviata una notifica dall'Observable, il seguente metodo viene eseguito. L'argomento arg, per ora, contiene un oggetto Log
+    /**
+     * Una volta inviata una notifica dall'Observable, il seguente metodo viene eseguito.
+     * L'argomento arg, per ora, contiene un oggetto Log.
      * E' necessario fare il parsing in quanto nel metodo update, arg è un argomento di tipo oggetto generico */
     @Override
     public void update(Observable o, Object arg) {

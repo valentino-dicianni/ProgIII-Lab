@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Observable;
 
@@ -41,24 +40,16 @@ public class ClientEmailModel extends Observable {
 	public String getNomeAcClient() {
 		return nomeAcClient;
 	}
-
 	public String getEmailClient() {
 		return emailClient;
 	}
-
     public ServerInterface getServer() {
         return server;
     }
-
     public DefaultListModel getMailList() {
         return mailList;
     }
-
-
-    public String toString() {
-		return ("Modello della Mail di " + nomeAcClient);
-
-	}
+    public String toString() {return ("Modello della Mail di " + nomeAcClient);}
 
 	/**
      *  metodo set dell'email come letta, notifica apertura email agli observers
@@ -82,6 +73,9 @@ public class ClientEmailModel extends Observable {
 		notifyObservers("newEmailForm");
 	}
 
+    /**
+     * metodo che ritorna il numero di messaggi ancora da leggere presenti sul server
+     */
 	public int getNonLetti(){
         int num = 0;
 	    try {
@@ -90,12 +84,10 @@ public class ClientEmailModel extends Observable {
             e.printStackTrace();
         }
         return num;
-
     }
 
     /**
 	 * Metodo che inizializza la casella mail all'apertura
-	 * TODO aggiungere pull dal mail server delle ultime 15 mail
 	 */
 	public void showMail()  {
         ArrayList<Email> serverList =new ArrayList();
@@ -114,11 +106,9 @@ public class ClientEmailModel extends Observable {
     /**
      * Metodo che preleva informazioni riguardanti la email da inoltrare o a cui
      * rispondere
-     * TODO aggiungere pull dal mail server delle ultime 15 mail
      */
     public void getSelectedEmailData(Email openedEmail, String action) {
         ArrayList a = new ArrayList();
-
         a.add(action);
         a.add(openedEmail.getMittEmail());
         a.add(openedEmail.getDestEmail());
@@ -145,10 +135,11 @@ public class ClientEmailModel extends Observable {
 	}
 
     /**
-     * Metodo che chiama rmi sul server e invia un oggetto serializable Email al server. In caso di errore avvisa l'utente
-     * tramite finestra di dialog!
+     * Metodo che chiama rmi sul server e invia uno o più  oggetto serializable Email al server.
+     * In caso di errore avvisa l'utente tramite la variabile success.
+     *
      */
-    public boolean sendEmail(ArrayList<String> toFieldText,String dest, String subjectFieldText, String contentFieldText) {
+    public boolean sendEmail(ArrayList<String> toFieldText, String subjectFieldText, String contentFieldText) {
         boolean success = false;
         try {
             String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -160,33 +151,26 @@ public class ClientEmailModel extends Observable {
                     if (!destinatario.matches(emailPattern)) {return success;}
                     success = server.inviaMail(new Email(emailClient,destinatario,toFieldText, subjectFieldText, newTExtField, 1, date, false));
                 }
-
             }
-
             if(success){System.out.println("Email inviata con successo al server...");}
-
         } catch(RemoteException e){
                 e.printStackTrace();
         }
-
         return success;
     }
 
-
-        /**
+    /**
      * Metodo che al momento della chiusura del client mail
      * notifica al server l'avvenuta chiusura.
      */
 	public void closeOperation(){
 		try {
 			server.appendToLog("Client disconnesso");
-			server.writeFile(emailClient);
-
+			server.writeFile();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}finally {
 			System.exit(0);
-
 		}
 	}
 
@@ -209,7 +193,6 @@ class RefreshMailThread implements Runnable {
         while(true){
             try {
                 Thread.sleep(2000);
-
                 ArrayList serverList = model.getServer().getEmail(model.getEmailClient());
                 DefaultListModel clientList = model.getMailList();
                 Object[] arr=clientList.toArray();
@@ -218,7 +201,6 @@ class RefreshMailThread implements Runnable {
                     for (int j = arr.length-1; j >= 0; j--) {
                         serverList.remove(arr[j]);
                     }
-
                     for (Object mergeElem : serverList) {
                         clientList.add(0,mergeElem);
                     }
@@ -226,13 +208,11 @@ class RefreshMailThread implements Runnable {
                         model.getServer().appendToLog("Ci sono nuove mail disponibili nella casella del client: " + model.getNomeAcClient());
                     }
                 }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
-
 }

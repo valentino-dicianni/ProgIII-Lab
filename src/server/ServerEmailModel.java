@@ -18,16 +18,15 @@ public class ServerEmailModel extends Observable {
     private Log log;
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
 
-
-    //classe Log
+    /**
+     * classe innestata Log
+     */
     public class Log extends UnicastRemoteObject implements ServerInterface {
         private String  nomeLog, testoLog;
         private Date dataCreazione;
-        private int idLog;
 
-        public Log(int idLog, String nomeLog, String testoLog, Date dataCreazione) throws RemoteException {
+        public Log(String nomeLog, String testoLog, Date dataCreazione) throws RemoteException {
 
-            this.idLog = idLog;
             this.nomeLog = nomeLog;
             this.testoLog = testoLog;
             this.dataCreazione = dataCreazione;
@@ -54,31 +53,26 @@ public class ServerEmailModel extends Observable {
         public String getTestoLog() {
             return testoLog;
         }
-
         public void setTestoLog(String testoLog) {
             this.testoLog = testoLog;
         }
-
         public Date getDataCreazione() {
             return dataCreazione;
         }
-
         public void setDataCreazione(Date dataCreazione) {
             this.dataCreazione = dataCreazione;
         }
-
         public String getNomeLog() {
             return nomeLog;
         }
-
         public void setNomeLog(String nomeLog) {
             this.nomeLog = nomeLog;
         }
 
-        public void removeLog(int idLog){
-            this.idLog = idLog;
-        }
-
+        /**
+         * metodo che controlla quali mail in un determinato indirizzo mail sono state lette
+         * e ne ritorna il numero esatto
+         */
         @Override
         public int getInfoLetture(String address){
             int num = 0;
@@ -91,6 +85,10 @@ public class ServerEmailModel extends Observable {
             return num;
         }
 
+        /**
+         * metodo che aggiunge una nuova linea di testo al Log
+         * e notifica alla vista il cambiamento effettuato
+         */
         @Override
         public void appendToLog(String testoLog){
             setTestoLog(getTestoLog()+"\n"+newMessageLog(testoLog));
@@ -113,14 +111,21 @@ public class ServerEmailModel extends Observable {
             return newLogMessage;
         }
 
+        /**
+         * metodo che cancella il Log attuale e notifica alla vista le modfiche
+         */
         public void clearLog(){
             setTestoLog("");
             setChanged();
             notifyObservers(this);
         }
 
+        /**
+         * metodo che imposta come letta una determinata mail all'interno del server quando
+         * lato client si clicca su di essa
+         */
         @Override
-        public synchronized void setReadMail(String address, Email mail){
+        public synchronized void setReadMail(String address, Email mail) throws RemoteException{
             ArrayList<Email> list = serverMailList.get(address);
             if(list.contains(mail)){
                 for(Email iter : list){
@@ -130,13 +135,14 @@ public class ServerEmailModel extends Observable {
                 }
             }
             else appendToLog("Errore: la mail "+mail+" non è presente nel database");
-
         }
 
         /**
          * metodo che aggiunge alla lista delle mail di un utente la nuova mail inviata
          * @syncronized per per evitare che che ci sia una lettura mentre avviene la scrittura
-         * nel caso in cui non esistelle la casella mail a cui aggiungerla: messaggio di errore*/
+         * nel caso in cui non esistelle la casella mail a cui aggiungerla: messaggio di errore
+         * @param mail mail da inviare
+         */
         @Override
         public synchronized boolean inviaMail(Email mail) throws RemoteException{
             boolean success;
@@ -144,21 +150,29 @@ public class ServerEmailModel extends Observable {
                     mail.setTestoEmail(mail.getTestoEmail().replace("§", "\n"));
                     serverMailList.get(mail.getDest()).add(0, mail);
                     success = true;
-
-                }//se la scrittura non è andata a buon fine
+                }
                 else {
                     appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() + ": Indirizzo mail non esistente");
                     success = false;
                 }
-
             return success;
         }
 
+        /**
+         * metodo che ritorna la lista di mail associate ad un certo account
+         * @param address indirizzo associato all'account di cui si vuole la
+         * lista di email
+         */
         @Override
         public synchronized ArrayList<Email> getEmail(String address) throws RemoteException{
            return serverMailList.get(address);
         }
 
+        /**
+         * metodo che rimuove dalla lista di mail la
+         * @param mail è la mail da eliminare
+         * @param key l'indirizzo mail associato
+         */
         @Override
         public synchronized void deleteEmail(String key,Email mail) throws RemoteException {
             serverMailList.get(key).remove(mail);
@@ -166,9 +180,11 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * funzione che sovrascrive il file email.csv con la lista aggiornata di email
+         * funzione che sovrascrive il file email.csv con la lista aggiornata di email.
+         * Ogni volta che un client esegue il logout(non forzato) viene sovrascritto il
+         * file email.csv con la lista delle mail presenti nella hashtable del server.
          */
-        public synchronized void writeFile(String address){
+        public synchronized void writeFile(){
             BufferedWriter bw;
             try {
                 bw = new BufferedWriter (new FileWriter("src/server/email.csv"));
@@ -179,11 +195,9 @@ public class ServerEmailModel extends Observable {
                         Date dataSpedizioneEmail = mail.getDataSpedEmail();
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         String formattedDate = dateFormat.format(dataSpedizioneEmail);
-
                         bw.write(mail.getMittEmail()+"#"+mail.getDest()+"#"+mail.getArgEmail()+
                                 "#"+mail.getTestoEmail().replace("\n","§")+"#"+ mail.getPriorEmail()+
                                 "#"+formattedDate+"#"+mail.isRead()+"#"+mail.getCcString()+"\n");
-
                         bw.flush();
                     }
                 }
@@ -192,12 +206,13 @@ public class ServerEmailModel extends Observable {
                 e.printStackTrace();
             }
         }
-
     }//fine Class Log
 
-
-    public Log addLog(int idLog, String nomeLog, String textLog, Date dataCreazioneLog) throws RemoteException {
-        log= new Log(idLog,nomeLog,textLog,dataCreazioneLog);
+    /**
+     * metodo che crea un nuovo log
+     */
+    public Log addLog(String nomeLog, String textLog, Date dataCreazioneLog) throws RemoteException {
+        log= new Log(nomeLog,textLog,dataCreazioneLog);
         return log;
     }
     public Log getLogServer() {
@@ -205,14 +220,15 @@ public class ServerEmailModel extends Observable {
     }
 
     /**
-     * costruttore che va a prendere da file le vecchie mail e inizializza la lista di mail dei contatti
+     * costruttore del server Model:
+     * legge su file email.csv e ad ogni riga, crea una oggetto Email da
+     * aggiungere all'interno della hashtable serverMailList.
      */
-
     public ServerEmailModel() {
         this.serverMailList = new HashMap<>();
         String csvFile = "src/server/email.csv";
         BufferedReader br = null;
-        String line = "";
+        String line;
         String cvsSplitBy = "#";
         ArrayList<Email> emailListUser = new ArrayList<>();
         ArrayList<Email> emailListUser2 = new ArrayList<>();
@@ -248,21 +264,11 @@ public class ServerEmailModel extends Observable {
             this.serverMailList.put(keyUser2, emailListUser2);
             this.serverMailList.put(keyUser3, emailListUser3);
 
-
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
         }
     }
 
