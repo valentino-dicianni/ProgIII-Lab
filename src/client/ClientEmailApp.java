@@ -117,7 +117,7 @@ public class ClientEmailApp extends JFrame {
 
 	public static void main(String[] args) {
 		// TODO creare un input panel per chiedere nickname e emailAddress per poterlo personalizzare
-		ClientEmailApp client = new ClientEmailApp("Franz3", "user@gmail.com");
+		ClientEmailApp client = new ClientEmailApp("Franz3", "user3@gmail.com");
 	}
 
 }

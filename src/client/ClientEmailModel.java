@@ -141,7 +141,7 @@ public class ClientEmailModel extends Observable {
             e.printStackTrace();
         }
         setChanged();
-        notifyObservers("updateMailList");
+        notifyObservers("deleteCompleted");
 	}
 
     /**

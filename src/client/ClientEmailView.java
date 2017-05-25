@@ -279,34 +279,43 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			this.repaint();
 		}
 		else if(arg1 == "updateMailList"){
-            clientEmailList.setModel(((ClientEmailModel)arg0).getMailList());
-            clientEmailList.addMouseListener(clientEmailCtrl);
-          	clientEmailList.setFixedCellHeight(75);
-			clientEmailList.setCellRenderer(new MyListCellRenderer());
-			clientEmailList.setFixedCellWidth(400);
-			clientEmailList.setBackground(Color.decode("#f9f9f7"));
-            //Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
-            clientEmailList.addMouseMotionListener(new MouseMotionAdapter() {
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                    //Point p = null;
-                    JList theList = (JList) e.getSource();
-                    //ListModel model = theList.getModel();
-                    int index = theList.locationToIndex(e.getPoint());
-                    if (index > -1) {
-                        //theList.setToolTipText(null);
-                        theList.setSelectedIndex(index);
-                    }
-                }
-            });
+			updateEmailList(((ClientEmailModel)arg0).getMailList());
 		}
+		else if(arg1 == "deleteCompleted"){
+			updateEmailList(((ClientEmailModel)arg0).getMailList());
+			this.remove(interactiveRightPanel);
+			this.revalidate();
+			add(defaultRightPanel(),c);
+		}
+	}
+
+	public void updateEmailList(DefaultListModel mailList) {
+		clientEmailList.setModel(mailList);
+		clientEmailList.addMouseListener(clientEmailCtrl);
+		clientEmailList.setFixedCellHeight(75);
+		clientEmailList.setCellRenderer(new MyListCellRenderer());
+		clientEmailList.setFixedCellWidth(400);
+		clientEmailList.setBackground(Color.decode("#f9f9f7"));
+		//Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
+		clientEmailList.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				//Point p = null;
+				JList theList = (JList) e.getSource();
+				//ListModel model = theList.getModel();
+				int index = theList.locationToIndex(e.getPoint());
+				if (index > -1) {
+					//theList.setToolTipText(null);
+					theList.setSelectedIndex(index);
+				}
+			}
+		});
 	}
 
 	/**
 	 * Metodo avente compito di aggiornamento lista e variabili in seguito ad apertura email dalla lista*/
 	@Override
 	public void updateClientGUI(Email selectedEmail) {
-
 		clientEmailList.setCellRenderer(new MyListCellRenderer());
 		receivedEmailSender.setText("<html><b>DA: </b>"+selectedEmail.getMittEmail()+"</html>");
 		receivedEmailSender.setFont(new Font("Helvetica", Font.PLAIN, 13));
