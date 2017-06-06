@@ -287,6 +287,9 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			this.revalidate();
 			add(defaultRightPanel(),c);
 		}
+		else if(arg1 == "newEmailReceived"){
+			JOptionPane.showMessageDialog(null, "Hai ricevuto un nuovo messaggio", "Nuovo messaggio!", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	public void updateEmailList(DefaultListModel mailList) {
