@@ -2,7 +2,6 @@ package client;
 
 import commonResources.Email;
 import commonResources.ServerInterface;
-
 import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -13,12 +12,10 @@ import java.util.Observable;
 
 public class ClientEmailModel extends Observable {
 
-    private String nomeAcClient, emailClient;
+    private String nomeAcClient, emailClient, ipServer;
     private DefaultListModel mailList = new DefaultListModel();
     private ServerInterface server;
-    private String ipServer;
     private RefreshMailThread refreshThread = new RefreshMailThread(this);
-
 
     public ClientEmailModel(String nomeAcClient, String emailClient, String ipServer) {
         this.nomeAcClient = nomeAcClient;
@@ -34,7 +31,6 @@ public class ClientEmailModel extends Observable {
         }
         //start refresh list thread
         new Thread(refreshThread).start();
-
     }
 
     public String getNomeAcClient() {
@@ -58,7 +54,7 @@ public class ClientEmailModel extends Observable {
     }
 
     /**
-     * metodo set dell'email come letta, notifica apertura email agli observers
+     * Metodo di set dell'email come letta, notifica apertura email agli observers
      */
     public void openEmail(Email selectedEmail) {
         selectedEmail.setRead(true);
@@ -72,7 +68,7 @@ public class ClientEmailModel extends Observable {
     }
 
     /**
-     * metodo per notificare richiesta di caricamento form di creazione email
+     * Metodo per notificare richiesta di caricamento form di creazione email
      */
     public void showNewEmailForm() {
         setChanged();
@@ -80,7 +76,7 @@ public class ClientEmailModel extends Observable {
     }
 
     /**
-     * metodo che ritorna il numero di messaggi ancora da leggere presenti sul server
+     * Metodo che restituisce il numero di messaggi ancora da leggere
      */
     public int getNonLetti() {
         int num = 0;
@@ -121,13 +117,12 @@ public class ClientEmailModel extends Observable {
         a.add(openedEmail.getArgEmail());
         a.add(openedEmail.getTestoEmail());
         a.add(openedEmail.getDest());
-
         setChanged();
         notifyObservers(a);
     }
 
     /**
-     * metodo che elimina la mail selezionata dalla lista delle mail
+     * Metodo che elimina la mail selezionata dalla lista delle mail
      */
     public void deleteMail(Email mail) {
         mailList.removeElement(mail);
@@ -141,7 +136,7 @@ public class ClientEmailModel extends Observable {
     }
 
     /**
-     * Metodo che chiama rmi sul server e invia uno o più  oggetto serializable Email al server.
+     * Metodo che chiama rmi sul server e invia uno o più oggetti serializable Email al server.
      * In caso di errore avvisa l'utente tramite la variabile success.
      */
     public boolean sendEmail(ArrayList<String> toFieldText, String subjectFieldText, String contentFieldText) {
@@ -160,8 +155,8 @@ public class ClientEmailModel extends Observable {
                 }
             }
             if (success) {
-                //non viene stampato nessun log sul log del server in quanto l'indirizzo mail non è ben formato!
-                //quindi il controllo viene bloccato lato client, senza inerrogare il server.
+                //Nota: non viene stampato nessun messaggio sul log del server in quanto l'indirizzo mail non è ben formato e
+                //il controllo viene bloccato lato client, senza interrogare il server.
                 System.out.println("Email inviata con successo al server...");
             }
         } catch (RemoteException e) {
@@ -187,7 +182,7 @@ public class ClientEmailModel extends Observable {
 
 
     /**
-     * Thread che in maniera periodica va a fare la pool dall mail box del server e ritorna eventuali
+     * Thread che in maniera periodica va a fare la pool dall mail box del server e restituisce eventuali
      * nuovi messaggi per l'utente specifico.
      *
      * @pre: - clientList possiede tutte le mail vecchie (oppure nessuna quando si apre la casella)
