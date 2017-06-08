@@ -117,7 +117,8 @@ public class ClientEmailApp extends JFrame {
 
 	public static void main(String[] args) {
 		try {
-			ClientEmailApp client = new ClientEmailApp("Franz3", "user@gmail.com");
+			ClientEmailApp client = new ClientEmailApp("Franz", "user@gmail.com");
+			ClientEmailApp client2 = new ClientEmailApp("Franz2", "user2@gmail.com");
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Failed to create Client", "createClientError", JOptionPane.ERROR_MESSAGE);

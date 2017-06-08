@@ -159,6 +159,8 @@ public class ClientEmailModel extends Observable {
                 }
             }
             if (success) {
+                //non viene stampato nessun log sul log del server in quanto l'indirizzo mail non è ben formato!
+                //quindi il controllo viene bloccato lato client, senza inerrogare il server.
                 System.out.println("Email inviata con successo al server...");
             }
         } catch (RemoteException e) {

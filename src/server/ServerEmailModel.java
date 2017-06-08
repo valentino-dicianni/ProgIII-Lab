@@ -150,6 +150,8 @@ public class ServerEmailModel extends Observable {
                     mail.setTestoEmail(mail.getTestoEmail().replace("§", "\n"));
                     serverMailList.get(mail.getDest()).add(0, mail);
                     success = true;
+                    appendToLog (mail.getMittEmail() + " ha inviato una nuova mail a: " + mail.getCcString());
+
                 }
                 else {
                     appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() + ": Indirizzo mail non esistente");
