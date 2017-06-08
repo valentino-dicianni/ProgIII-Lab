@@ -19,7 +19,7 @@ public class ServerEmailModel extends Observable {
     private HashMap<String, ArrayList<Email>> serverMailList = new HashMap<>();
 
     /**
-     * classe innestata Log
+     * Classe innestata Log
      */
     public class Log extends UnicastRemoteObject implements ServerInterface {
         private String  nomeLog, testoLog;
@@ -31,16 +31,15 @@ public class ServerEmailModel extends Observable {
             this.testoLog = testoLog;
             this.dataCreazione = dataCreazione;
 
-            // set del file delle policy di sicurezza (affinché il Security Manager possa leggerlo)
+            // Set del file delle policy di sicurezza (affinché il Security Manager possa leggerlo)
             String result =  System.setProperty("java.security.policy","file:server.policy");
 
-            // creo il SecurityManager, se non esiste già
+            // Creazione del SecurityManager, se non esiste già
             try {
                 if (System.getSecurityManager() == null) {System.setSecurityManager(new SecurityManager());}
-
-                // creo registry che ascolta su una specifica porta
+                // Creazione registry che ascolta su una specifica porta
                 java.rmi.registry.LocateRegistry.createRegistry(2000);
-                // binding del server su rmiregistry alla porta opportuna
+                // Binding del server su rmiregistry alla porta opportuna
                 Naming.rebind("rmi://127.0.0.1:2000/server", this);
             }
             catch (Exception e) {
@@ -70,7 +69,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che controlla quali mail in un determinato indirizzo mail sono state lette
+         * Metodo che controlla quali mail in un determinato indirizzo mail sono state lette
          * e ne ritorna il numero esatto
          */
         @Override
@@ -86,7 +85,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che aggiunge una nuova linea di testo al Log
+         * Metodo che aggiunge una nuova linea di testo al Log
          * e notifica alla vista il cambiamento effettuato
          */
         @Override
@@ -102,7 +101,6 @@ public class ServerEmailModel extends Observable {
             String newLogMessage;
             String header = null;
             try {
-               //TODO aggiungere nome del client all'header
                 header = "[ "+dateFormat.format(date)+ " Client IP:"+getClientHost()+"] - ";
             } catch (ServerNotActiveException e) {
                 e.printStackTrace();
@@ -112,7 +110,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che cancella il Log attuale e notifica alla vista le modfiche
+         * Metodo che cancella il Log attuale e notifica alla vista le modfiche
          */
         public void clearLog(){
             setTestoLog("");
@@ -121,7 +119,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che imposta come letta una determinata mail all'interno del server quando
+         * Metodo che imposta come letta una determinata mail all'interno del server quando
          * lato client si clicca su di essa
          */
         @Override
@@ -138,7 +136,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che aggiunge alla lista delle mail di un utente la nuova mail inviata
+         * Metodo che aggiunge alla lista delle mail di un utente la nuova mail inviata
          * @syncronized per per evitare che che ci sia una lettura mentre avviene la scrittura
          * nel caso in cui non esistelle la casella mail a cui aggiungerla: messaggio di errore
          * @param mail mail da inviare
@@ -161,7 +159,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che ritorna la lista di mail associate ad un certo account
+         * Metodo che ritorna la lista di mail associate ad un certo account
          * @param address indirizzo associato all'account di cui si vuole la
          * lista di email
          */
@@ -171,7 +169,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * metodo che rimuove dalla lista di mail la
+         * Metodo che rimuove dalla lista di mail la
          * @param mail è la mail da eliminare
          * @param key l'indirizzo mail associato
          */
@@ -182,7 +180,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * funzione che sovrascrive il file email.csv con la lista aggiornata di email.
+         * Metodo che sovrascrive il file email.csv con la lista aggiornata di email.
          * Ogni volta che un client esegue il logout(non forzato) viene sovrascritto il
          * file email.csv con la lista delle mail presenti nella hashtable del server.
          */
@@ -211,7 +209,7 @@ public class ServerEmailModel extends Observable {
     }//fine Class Log
 
     /**
-     * metodo che crea un nuovo log
+     * Metodo che crea un nuovo log
      */
     public Log addLog(String nomeLog, String textLog, Date dataCreazioneLog) throws RemoteException {
         log= new Log(nomeLog,textLog,dataCreazioneLog);
@@ -222,7 +220,7 @@ public class ServerEmailModel extends Observable {
     }
 
     /**
-     * costruttore del server Model:
+     * Costruttore del server Model:
      * legge su file email.csv e ad ogni riga, crea una oggetto Email da
      * aggiungere all'interno della hashtable serverMailList.
      */

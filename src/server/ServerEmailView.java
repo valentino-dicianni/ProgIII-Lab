@@ -20,28 +20,28 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         this.serverEmailCtrl = serverEmailCtrl;
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 3;
         c.weighty = 1;
         c.insets = new Insets(10, 10, 10, 10);
-
         c.fill = GridBagConstraints.BOTH;
         add(logAreaPanel("Inizializzazione Log - Server operativo"), c);
+
         c.gridx = 1;
         c.gridy = 0;
         c.weightx = 0.1;
         c.fill = GridBagConstraints.HORIZONTAL;
         add(logOptions(),c);
-
         serverEmailCtrl.createLog(logTxtArea.getText());
     }
 
+    /**
+     * Metodo che crea e restituisce pannello contenente il log
+     */
     public JPanel logAreaPanel(String text) {
         removeAll();
         JPanel mainPanel = new JPanel(new BorderLayout());
-
         JButton cleanButton = new JButton("Pulisci log");
         cleanButton.setFont(new Font("Helvetica", Font.BOLD, 14));
         mainPanel.setBorder(BorderFactory.createTitledBorder("LOG"));
@@ -60,6 +60,9 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         return mainPanel;
     }
 
+    /**
+     * Metodo che crea e restituisce pannello destro contenente opzioni colore della finestra di log
+     */
     public JPanel logOptions(){
         JPanel logOptionsPanel = new JPanel(new BorderLayout());
         JCheckBox colorCheckBoxBW = new JCheckBox("<html>Nero/<br>bianco</html>");
@@ -68,15 +71,11 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         colorCheckBoxBG.setFont(new Font("Helvetica", Font.BOLD, 13));
         JCheckBox colorCheckBoxWB = new JCheckBox("<html>Bianco/<br>Nero</html>");
         colorCheckBoxWB.setFont(new Font("Helvetica", Font.BOLD, 13));
-
         colorCheckBoxBG.setSelected(true);
-
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(colorCheckBoxBG);
         buttonGroup.add(colorCheckBoxBW);
         buttonGroup.add(colorCheckBoxWB);
-
-
         colorCheckBoxBW.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,9 +105,8 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
     }
 
     /**
-     * Una volta inviata una notifica dall'Observable, il seguente metodo viene eseguito.
-     * L'argomento arg, per ora, contiene un oggetto Log.
-     * E' necessario fare il parsing in quanto nel metodo update, arg è un argomento di tipo oggetto generico */
+     * Metodo update, viene richiamato in seguito ad una modifica dell'elemento osservato notificata attraverso il metodo notifyObservers
+     * */
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof ServerEmailModel.Log){
