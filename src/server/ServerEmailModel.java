@@ -32,7 +32,7 @@ public class ServerEmailModel extends Observable {
             this.dataCreazione = dataCreazione;
 
             // Set del file delle policy di sicurezza (affinché il Security Manager possa leggerlo)
-            String result =  System.setProperty("java.security.policy","file:server.policy");
+            System.setProperty("java.security.policy","file:server.policy");
 
             // Creazione del SecurityManager, se non esiste già
             try {
@@ -214,8 +214,8 @@ public class ServerEmailModel extends Observable {
     /**
      * Metodo che crea un nuovo log
      */
-    public Log addLog(String nomeLog, String textLog, Date dataCreazioneLog) throws RemoteException {
-        log= new Log(nomeLog,textLog,dataCreazioneLog);
+    public Log addLog(String nomeLog, String textLog) throws RemoteException {
+        log= new Log(nomeLog,textLog, null);
         return log;
     }
     public Log getLogServer() {
@@ -268,9 +268,7 @@ public class ServerEmailModel extends Observable {
             this.serverMailList.put(keyUser3, emailListUser3);
 
             br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

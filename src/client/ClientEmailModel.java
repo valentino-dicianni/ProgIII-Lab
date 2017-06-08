@@ -155,10 +155,10 @@ public class ClientEmailModel extends Observable {
                 }
             }
             if (success) {
-                //Nota: non viene stampato nessun messaggio sul log del server in quanto l'indirizzo mail non è ben formato e
-                //il controllo viene bloccato lato client, senza interrogare il server.
                 System.out.println("Email inviata con successo al server...");
             }
+            //Nota: non viene stampato nessun messaggio sul log del server in quanto l'indirizzo mail non è ben formato e
+            //il controllo viene bloccato lato client, senza interrogare il server.
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -198,7 +198,7 @@ public class ClientEmailModel extends Observable {
 
         public void run() {
             System.out.println(Thread.currentThread().getName() + " di " + model.getEmailClient());
-            while (true) {
+            while (model != null) {
                 try {
                     Thread.sleep(2000);
                     ArrayList serverList = model.getServer().getEmail(model.getEmailClient());

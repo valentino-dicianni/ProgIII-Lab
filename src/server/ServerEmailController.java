@@ -18,7 +18,7 @@ public class ServerEmailController implements ActionListener {
 
     public void createLog(String textLog) {
         try {
-            serverEmailMod.addLog("log1", textLog, null);
+            serverEmailMod.addLog("log1", textLog);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

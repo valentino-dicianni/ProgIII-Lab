@@ -29,7 +29,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	private GridBagConstraints topRightPanelConst;
 
 	//JList contenente le Email
-	private JList<Email> clientEmailList =  new JList<Email>();
+	private JList<Email> clientEmailList =  new JList<>();
 
 	//Vars form nuova mail
 	private JTextField newMailDest = new JTextField();
@@ -225,7 +225,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
         c.gridy = 0;
         c.weightx = 0;
         c.weighty = 0;
-		JLabel welcomeLabel = new JLabel("<html><b>Bentornato, "+clientEmailCtrl.getClientName()+". <br>Hai ricevuto "+clientEmailCtrl.getNumMsgNonLetti() +" mail dal tuo ultimo accesso.</b></html>");
+		JLabel welcomeLabel = new JLabel("<html><b>Bentornato, "+clientEmailCtrl.getClientName()+
+                ". <br>Hai ricevuto "+clientEmailCtrl.getNumMsgNonLetti() +" mail dal tuo ultimo accesso.</b></html>");
 		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 15));
 		interactiveRightPanel.add(welcomeLabel,c);
 		interactiveRightPanel.revalidate();
@@ -233,7 +234,8 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	}
 
 	/**
-	 * Metodo update, viene richiamato in seguito ad una modifica dell'elemento osservato notificata attraverso il metodo notifyObservers
+	 * Metodo update, viene richiamato in seguito ad una modifica dell'elemento
+     * osservato notificata attraverso il metodo notifyObservers
 	 * */
 	@Override
 	public void update(Observable arg0, Object arg1) {
