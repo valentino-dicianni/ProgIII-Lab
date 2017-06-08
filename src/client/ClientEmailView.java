@@ -345,19 +345,19 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		newEmailText.setFont(new Font("Helvetica", Font.PLAIN, 14));
 		newEmailText.setRows(30);
         interactiveRightPanel.removeAll();
-        if(optEmailData != null && optEmailData.get(0).toString() =="frwd"){
+        if(optEmailData != null && optEmailData.get(0).toString().equals("frwd")){
         	newEmailText.setText("\n\n--------MESSAGGIO INOLTRATO--------" +
 			"\n\nDA: <"+optEmailData.get(1).toString()+">"+
 			"\nA: <" +optEmailData.get(2).toString()+">"+
 			"\nOGGETTO: "+optEmailData.get(3).toString()+
-			"\nTESTO:\n:"+optEmailData.get(4).toString()+">"+
+			"\nTESTO:\n:"+optEmailData.get(4).toString()+
 			"\n\n ------------------------------");
             newEmailText.getCaret().setVisible(true);
             newEmailText.setCaretPosition(0);
 			newEmailSubject.setText("");
 			newMailDest.setText("");
 		}
-		else if(optEmailData != null && optEmailData.get(0).toString() =="reply"){
+		else if(optEmailData != null && optEmailData.get(0).toString().equals("reply")){
         	newMailDest.setText(optEmailData.get(1).toString());
         	newEmailSubject.setText("RE: "+optEmailData.get(3).toString());
 			newEmailText.setText("\n\n--------In risposta a--------" +
@@ -368,7 +368,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			newEmailText.getCaret().setVisible(true);
 			newEmailText.setCaretPosition(0);
 		}
-        else if(optEmailData != null && optEmailData.get(0).toString() =="replyAll") {
+        else if(optEmailData != null && optEmailData.get(0).toString().equals("replyAll")) {
             HashSet<String> newDest = new HashSet<>();
             newDest.add(optEmailData.get(1).toString());
             ArrayList<String> dst = (ArrayList<String>) optEmailData.get(2);
@@ -541,7 +541,7 @@ class MyListCellRenderer extends JLabel implements ListCellRenderer<Email> {
 		setText(labelText);
 
 		ImageIcon imageIcon;
-		if (isRead == false) {
+		if (!isRead) {
 			imageIcon = new ImageIcon(getClass().getResource("/newMail.png"));
 		} else {
 			imageIcon = new ImageIcon(getClass().getResource("/openedEmail.png"));
