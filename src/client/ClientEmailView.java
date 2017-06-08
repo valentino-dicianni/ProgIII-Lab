@@ -37,7 +37,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
     private JTextField newEmailSubject = new JTextField();
 	private JTextArea newEmailText = new JTextArea();
 
-
 	//received Email vars
 	private JLabel receivedEmailSender = new JLabel();
 	private JLabel receivedEmailDest = new JLabel();
@@ -87,7 +86,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		/* PARTE DESTRA
 		 * (A seguire le costanti necessarie per il corretto posizionamento del pannello di destra all'interno del pannello this)*/
 		c.gridx = 1;
-		c.gridy = 1; //1 perchè è sotto la topbar
+		c.gridy = 1;
 		c.weightx = 0;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
@@ -95,6 +94,9 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		add(defaultRightPanel(),c);
 	}
 
+	/**
+	 * metodo per visualizzazione pannello topleft
+	 */
 	private JPanel TopLeftPanel(){
 		JPanel topLeftPanel = new JPanel(new GridBagLayout());
 		topLeftPanel.setBackground(Color.decode("#5460ce"));
@@ -111,9 +113,9 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		return topLeftPanel;
 	}
 
-	/* METODO PER VISUALIZZAZIONE PANNELLO DEFAULT TOPBAR, CON PULSANTI [PROVVISORIO]*/
-
-
+	/**
+	 * metodo per visualizzazione pannello topbar default, con pulsanti
+	 */
 	private JPanel TopRightPanel(boolean readEmailView,boolean sendEmailView) {
 		interactiveTopPanel = new JPanel(new GridBagLayout());
 
@@ -137,7 +139,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			interactiveTopPanel.add(newMailBtn, c);
 			newMailBtn.addActionListener(clientEmailCtrl);
 			if (readEmailView) {
-
 			    //FORWARD EMAIL BUTTON
 				JButton forwardBtn = new JButton();
 				forwardBtn.setToolTipText("Inoltra");
@@ -181,7 +182,6 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 			sendMailButton.setName("newMailBtn");
 			sendMailButton.setToolTipText("<html>Invia Mail</html>");
 
-			//todo capire eventualmente come fare per mettere l'actionlistener nel controller mandando pure i valori
 			sendMailButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -299,16 +299,12 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		clientEmailList.setCellRenderer(new MyListCellRenderer());
 		clientEmailList.setFixedCellWidth(400);
 		clientEmailList.setBackground(Color.decode("#f9f9f7"));
-		//Questo listener può rimanere in quanto ha funzioni puramente 'estetiche' ma non influenza in alcun modo il modello
 		clientEmailList.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				//Point p = null;
 				JList theList = (JList) e.getSource();
-				//ListModel model = theList.getModel();
 				int index = theList.locationToIndex(e.getPoint());
 				if (index > -1) {
-					//theList.setToolTipText(null);
 					theList.setSelectedIndex(index);
 				}
 			}
@@ -335,7 +331,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 	}
 
 	/**
-	 * Metodo avente compito di visualizzazione pannello di creazione email*/
+	 * Metodo con il compito di visualizzazione pannello di creazione email*/
 	@Override
 	public JPanel newEmailPanel(ArrayList optEmailData) {
 		JLabel labelTo = new JLabel();
@@ -505,7 +501,7 @@ public class ClientEmailView extends JPanel implements ClientEmailInterfaceView,
 		JPanel footerPanel = new JPanel(new GridBagLayout());
 		c.gridy=2;
 		c.weighty = 0;
-		JButton replyBtn = new JButton("Rispondi alla email"); //TODO Il replyAll da implementare cin seguito ome dialog di scelta.
+		JButton replyBtn = new JButton("Rispondi alla email");
 		replyBtn.setFont(new Font("Helvetica", Font.BOLD, 13));
 		replyBtn.setName("replyEmailBtn");
 		replyBtn.addActionListener(clientEmailCtrl);
