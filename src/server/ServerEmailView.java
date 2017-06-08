@@ -35,7 +35,7 @@ public class ServerEmailView extends JPanel implements ServerEmailInterfaceView,
         c.fill = GridBagConstraints.HORIZONTAL;
         add(logOptions(),c);
 
-        serverEmailCtrl.createLog("log1",logTxtArea.getText(),null);
+        serverEmailCtrl.createLog(logTxtArea.getText());
     }
 
     public JPanel logAreaPanel(String text) {

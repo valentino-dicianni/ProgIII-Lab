@@ -15,7 +15,6 @@ public class ClientEmailModel extends Observable {
     private String nomeAcClient, emailClient, ipServer;
     private DefaultListModel mailList = new DefaultListModel();
     private ServerInterface server;
-    private RefreshMailThread refreshThread = new RefreshMailThread(this);
 
     public ClientEmailModel(String nomeAcClient, String emailClient, String ipServer) {
         this.nomeAcClient = nomeAcClient;
@@ -30,6 +29,7 @@ public class ClientEmailModel extends Observable {
             return;
         }
         //start refresh list thread
+        RefreshMailThread refreshThread = new RefreshMailThread(this);
         new Thread(refreshThread).start();
     }
 
@@ -92,7 +92,7 @@ public class ClientEmailModel extends Observable {
      * Metodo che inizializza la casella mail all'apertura
      */
     public void showMail() {
-        ArrayList<Email> serverList = new ArrayList();
+        ArrayList<Email> serverList = new ArrayList<>();
         try {
             serverList = server.getEmail(emailClient);
         } catch (RemoteException e) {
@@ -218,9 +218,7 @@ public class ClientEmailModel extends Observable {
                             model.notifyObservers("newEmailReceived");
                         }
                     }
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (RemoteException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }

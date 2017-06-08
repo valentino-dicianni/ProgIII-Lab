@@ -26,19 +26,19 @@ public class ClientEmailController implements ActionListener, MouseListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if((((JButton) e.getSource()).getName())=="frwdBtn"){
+		if((((JButton) e.getSource()).getName()).equals("frwdBtn")){
 			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"frwd");
 		}
-		else if((((JButton) e.getSource()).getName())=="newMailBtn"){
+		else if((((JButton) e.getSource()).getName()).equals("newMailBtn")){
 			clientEmailMod.showNewEmailForm();
 		}
-		else if((((JButton) e.getSource()).getName())=="delEmailBtn"){
+		else if((((JButton) e.getSource()).getName()).equals("delEmailBtn")){
 			clientEmailMod.deleteMail(currentOpenedEmail);
 		}
-		else if((((JButton) e.getSource()).getName())=="replyEmailBtn"){
+		else if((((JButton) e.getSource()).getName()).equals("replyEmailBtn")){
 			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"reply");
 		}
-		else if((((JButton) e.getSource()).getName())=="replyAllEmailBtn"){
+		else if((((JButton) e.getSource()).getName()).equals("replyAllEmailBtn")){
 			clientEmailMod.getSelectedEmailData(currentOpenedEmail,"replyAll");
 		}
 	}
@@ -76,12 +76,7 @@ public class ClientEmailController implements ActionListener, MouseListener {
     }
 
 	public boolean newEmail(ArrayList<String> toFieldText, String subjectFieldText, String contentFieldText) {
-		if(clientEmailMod.sendEmail(toFieldText, subjectFieldText, contentFieldText)){
-			return true;
-		}
-		else{
-			return false;
-		}
+        return clientEmailMod.sendEmail(toFieldText, subjectFieldText, contentFieldText);
 	}
 	public int getNumMsgNonLetti(){
 		return clientEmailMod.getNonLetti();
