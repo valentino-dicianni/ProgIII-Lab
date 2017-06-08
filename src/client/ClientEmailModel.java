@@ -20,20 +20,21 @@ public class ClientEmailModel extends Observable {
     private RefreshMailThread refreshThread = new RefreshMailThread(this);
 
 
-    public ClientEmailModel(String nomeAcClient, String emailClient) {
+    public ClientEmailModel(String nomeAcClient, String emailClient, String ipServer) {
         this.nomeAcClient = nomeAcClient;
         this.emailClient = emailClient;
-        this.ipServer = JOptionPane.showInputDialog(null, "Inserire indirizzo IP locale del server", "localhost");
+        this.ipServer = ipServer;
 
         try {
             server = (ServerInterface) Naming.lookup("rmi://" + ipServer + ":2000/server");
-            System.out.println("Client connesso al server");
             server.appendToLog("Client " + nomeAcClient + " connesso");
         } catch (Exception e) {
-            System.out.println("Failed to find distributor " + e.getMessage());
+            System.out.println("Impossibile trovare il server\n" + e.getMessage());
+            return;
         }
         //start refresh list thread
         new Thread(refreshThread).start();
+
     }
 
     public String getNomeAcClient() {
