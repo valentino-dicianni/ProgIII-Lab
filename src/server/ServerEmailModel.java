@@ -85,7 +85,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * Metodo che aggiunge una nuova linea di testo al Log
+         * Metodo che aggiunge una nuovo messaggio al Log
          * e notifica alla vista il cambiamento effettuato
          */
         @Override
@@ -95,8 +95,12 @@ public class ServerEmailModel extends Observable {
             notifyObservers(this);
         }
 
+        /**
+         * Metodo che aggiunge un header con data e ip client al nuovo messaggio log
+         * da inserire e restituisce il messaggio log così modificato, pronto per essere inserito
+         */
         public String newMessageLog(String content){
-            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss"); //esempio alternativa: SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             Date date = new Date();
             String newLogMessage;
             String header = null;
@@ -110,7 +114,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * Metodo che cancella il Log attuale e notifica alla vista le modfiche
+         * Metodo che cancella il testo del Log e notifica alla vista le modfiche
          */
         public void clearLog(){
             setTestoLog("");
@@ -149,7 +153,6 @@ public class ServerEmailModel extends Observable {
                     serverMailList.get(mail.getDest()).add(0, mail);
                     success = true;
                     appendToLog (mail.getMittEmail() + " ha inviato una nuova mail a: " + mail.getCcString());
-
                 }
                 else {
                     appendToLog("Errore nell'invio della mail da " + mail.getMittEmail() + ": Indirizzo mail non esistente");
@@ -159,7 +162,7 @@ public class ServerEmailModel extends Observable {
         }
 
         /**
-         * Metodo che ritorna la lista di mail associate ad un certo account
+         * Metodo che restituisce la lista di mail associate ad un certo account
          * @param address indirizzo associato all'account di cui si vuole la
          * lista di email
          */
@@ -258,7 +261,7 @@ public class ServerEmailModel extends Observable {
                 else if (keyUser3.equals(email[1]))
                     emailListUser3.add(0,mail);
                 else
-                    System.out.print("Mail non appartenente ad un utente del nostro servizio");
+                    System.out.println("Mail non appartenente ad un utente del nostro servizio");
             }
             this.serverMailList.put(keyUser, emailListUser);
             this.serverMailList.put(keyUser2, emailListUser2);
